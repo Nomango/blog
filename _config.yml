@@ -47,8 +47,6 @@ marked:
   breaks: true
   prependRoot: true
   postAsset: true
-  external_link:
-    enable: true
 relative_link: false
 future: true
 highlight:
