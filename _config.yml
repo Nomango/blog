@@ -8,7 +8,7 @@ subtitle: ''
 description: ''
 keywords:
 author: Nomango
-language: en
+language: zh-CN
 timezone: ''
 
 # URL
@@ -32,7 +32,7 @@ i18n_dir: :lang
 skip_render:
 
 # Writing
-new_post_name: :title.md # File name of new posts
+new_post_name: :year-:month-:day-:title.md # File name of new posts
 default_layout: post
 titlecase: false # Transform title into titlecase
 external_link:
@@ -41,14 +41,21 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true
+marked:
+  gfm: true
+  breaks: true
+  prependRoot: true
+  postAsset: true
+  external_link:
+    enable: true
 relative_link: false
 future: true
 highlight:
   enable: true
   line_number: true
   auto_detect: false
-  tab_replace: ''
+  tab_replace: '    '
   wrap: true
   hljs: false
 prismjs:
