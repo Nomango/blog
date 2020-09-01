@@ -165,7 +165,7 @@ avatar:
   # Replace the default image and set the url here.
   url: /static/images/avatar.png
   # If true, the avatar will be dispalyed in circle.
-  rounded: true
+  rounded: false
   # If true, the avatar will be rotated with the cursor.
   rotated: false
 
@@ -295,7 +295,7 @@ related_posts:
 # Post edit
 # Dependencies: https://github.com/hexojs/hexo-deployer-git
 post_edit:
-  enable: true
+  enable: false
   url: https://github.com/Nomango/blog/edit/master/source/ # Link for view source
   #url: https://github.com/user-name/repo-name/edit/branch-name/subdirectory-name # Link for fork & edit
 
