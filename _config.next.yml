@@ -72,7 +72,7 @@ footer:
   # Beian ICP and gongan information for Chinese users. See: http://www.beian.miit.gov.cn, http://www.beian.gov.cn
   beian:
     enable: false
-    icp:
+    icp: 津ICP备20001052号-2
     # The digit in the num of gongan beian.
     gongan_id:
     # The full num of gongan beian.
