@@ -3,8 +3,7 @@ title: Elastic笔记（一）：Function Score Query
 tags:
   - elastic
 categories:
-  - - 学习笔记
-  - - Elastic笔记
+  - [学习笔记, Elastic笔记]
 date: 2020-09-10 15:40:40
 ---
 
