@@ -40,7 +40,7 @@ external_link:
   field: site # Apply to the whole site
   exclude: ''
 filename_case: 0
-render_drafts: false
+render_drafts: true
 post_asset_folder: true
 marked:
   gfm: true
@@ -109,3 +109,10 @@ theme: next
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: ''
+
+# Search
+search:
+  path: search.xml
+  field: post
+  content: true
+  format: html

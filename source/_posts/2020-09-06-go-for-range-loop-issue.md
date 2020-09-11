@@ -6,11 +6,11 @@ tags:
 categories: 技术闲聊
 ---
 
-**9月11日更新**
+{% note info %}
+#### 9月11日更新
 
 最近发布的`Go 1.14.9`版本已经修复了该BUG，详情右转👉[Release History](https://golang.org/doc/devel/release.html#go1.14)。
-
----
+{% endnote %}
 
 在Go 1.13和1.14版本现存一个很玄学的BUG，在for循环中的一个常数会导致无法退出循环，一个简单的示例：
 
