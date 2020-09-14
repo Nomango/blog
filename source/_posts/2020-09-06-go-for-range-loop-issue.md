@@ -7,8 +7,7 @@ categories: 技术闲聊
 ---
 
 {% note info %}
-#### 9月11日更新
-
+**9月11日更新**
 最近发布的`Go 1.14.9`版本已经修复了该BUG，详情右转👉[Release History](https://golang.org/doc/devel/release.html#go1.14)。
 {% endnote %}
 
