@@ -180,6 +180,7 @@ site_state: true
 social:
   GitHub: https://github.com/Nomango || fab fa-github
   E-Mail: mailto:hi@nomango.cn || fa fa-envelope
+  Zhihu: https://www.zhihu.com/people/liu-hai-bo-40-58 || fab fa-zhihu fa-fw fa-lg
   #Weibo: https://weibo.com/yourname || fab fa-weibo
   #Google: https://plus.google.com/yourname || fab fa-google
   #Twitter: https://twitter.com/yourname || fab fa-twitter
@@ -191,7 +192,7 @@ social:
 
 social_icons:
   enable: true
-  icons_only: false
+  icons_only: true
   transition: false
 
 # Blog rolls
