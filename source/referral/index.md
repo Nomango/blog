@@ -1,12 +1,10 @@
 ---
-title: 字节跳动内推
+title: 字节跳动日常内推ing
 comments: false
 date: 2020-11-04 16:45:48
 ---
 
 <div style="text-align:center;">
-
-### 日常内推ing
 
 **校招：**
 [校招链接](https://job.toutiao.com/s/Jmaahm4)
