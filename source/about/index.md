@@ -5,6 +5,8 @@ comments: true
 ---
 
 <div style="text-align:center;">
+<a href="/referral">🎓日常内推ing</a>
+<br/>
 嗅觉受体对芒果🥭有排斥反应
 <br/>
 地位在猫屎之上，🐈主子之下
