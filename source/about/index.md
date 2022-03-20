@@ -24,4 +24,6 @@ comments: true
 巨硬系列产品粉丝
 <br/>
 作品右转👉<a href="https://github.com/Nomango" target="_blank">Github</a>
+<br/>
+<a href="https://onepage.nomango.cn" target="_blank">One Page</a>
 </div>
