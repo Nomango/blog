@@ -23,7 +23,7 @@ export async function getStaticPaths() {
 
   return tags.map(tag => {
     return {
-      params: { tag },
+      params: { tag: tag.toLowerCase() },
       props: { tag },
     };
   });

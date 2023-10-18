@@ -1,13 +1,11 @@
 ---
 title: 在C++中传递数组的正确姿势
-date: 2020-10-11 15:55:27
-tags: C++
-categories:
-  - 技术闲聊
-  - C++杂谈
+date: 2020-10-11T15:55:27+08:00
+tags:
+  - Cpp
 ---
 
-今天看STL源码的时候注意到一个有意思的地方，获取定长数组的长度 `std::size` 函数的简单实现如下：
+今天看 STL 源码的时候注意到一个有意思的地方，获取定长数组的长度 `std::size` 函数的简单实现如下：
 
 ```cpp
 template <class _Ty, size_t _Size>
@@ -63,16 +61,16 @@ size(arr);  // compile error
 
 发现编译直接报错了，报错信息是参数列表不匹配，不能从 `int[10]` 为 `const int [_Size]` 推导模板参数。更有意思的是，宇宙第一编译器提示我 size 函数的签名是这样的
 
-{% asset_img IntelliSense.jpg %}
+![IntelliSense](/images/2020/cpp-passing-array-to-functions/IntelliSense.jpg)
 
-原来模板实例化以后产生的函数所需参数是 `const int *` 类型的，所以 _Size 模板参数是无法推导的，所以如果我直接传递一个 _Size 进去
+原来模板实例化以后产生的函数所需参数是 `const int *` 类型的，所以 \_Size 模板参数是无法推导的，所以如果我直接传递一个 \_Size 进去
 
 ```cpp
 int arr[10];
 constexpr auto len = size<9>(arr);
 ```
 
-编译器会好心的告诉我，len的结果是9，和arr的长度无关。
+编译器会好心的告诉我，len 的结果是 9，和 arr 的长度无关。
 
 难道之前课本上看到的方法是错误的吗？再写个函数测试一下
 
@@ -83,7 +81,7 @@ void DoSomething(int arr[10]) {
 }
 ```
 
-编译器又开心的提示我，len的值是4，验证了 `int arr[10]` 在参数中会退化成 `int*`。为了进一步验证这一点，再写一个函数测试一下：
+编译器又开心的提示我，len 的值是 4，验证了 `int arr[10]` 在参数中会退化成 `int*`。为了进一步验证这一点，再写一个函数测试一下：
 
 ```cpp
 // 传递定长数组
@@ -98,7 +96,7 @@ DoSomething(arr);  // compile success
 
 如果你在网站上直接搜索 `C++传递数组`，大部分资料告诉你的仍然是错误的
 
-{% asset_img sized-array.jpg tutorialspoint教程 %}
-{% asset_img sized-array-2.jpg 菜鸟教程 %}
+![tutorialspoint 教程](/images/2020/cpp-passing-array-to-functions/sized-array.jpg)
+![菜鸟教程](/images/2020/cpp-passing-array-to-functions/sized-array-2.jpg)
 
-看起来，想要学好C++还需要一些侦探思维，什么东西都要怀疑一下呢。
+看起来，想要学好 C++还需要一些侦探思维，什么东西都要怀疑一下呢。

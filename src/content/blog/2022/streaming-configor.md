@@ -1,10 +1,9 @@
 ---
 title: 将configor重构为流式调用
-date: 2022-10-10 15:25:00
-tags: C++
-categories:
-  - 技术闲聊
-  - C++杂谈
+date: 2022-10-10T15:25:00+08:00
+postSlug: streaming-configor
+tags:
+  - Cpp
 ---
 
 最近有一个重构 [configor](https://github.com/Nomango/configor) 的想法，那就是把它的序列化操作改为流式调用。
@@ -33,7 +32,7 @@ json::istream{ u } >> json::ostream{ std::cout };
 
 <!-- more -->
 
-这和 std::basic_i/ostream 做的事情很相似，毕竟 `std::cout << 100` 本身就是一种序列化，所以重构时完全可以参考标准IO流的实现方式，只不过标准IO流传递的是各种 `char` 类型，configor的流传输一种**不存储具体数据**的中间类型（暂且记为 `token` 类型）。
+这和 std::basic_i/ostream 做的事情很相似，毕竟 `std::cout << 100` 本身就是一种序列化，所以重构时完全可以参考标准 IO 流的实现方式，只不过标准 IO 流传递的是各种 `char` 类型，configor 的流传输一种**不存储具体数据**的中间类型（暂且记为 `token` 类型）。
 
 为了命名上不和标准库撞车，不妨给 configor 的流起个新名字 `tokenization`。
 
@@ -96,7 +95,7 @@ public:
 };
 ```
 
-`token_type` 不仅仅包含值类型（integer、float、string等），还包括 object_begin、object_end 之类的标志类型，如一个合法的 json token 序列可以是这样：
+`token_type` 不仅仅包含值类型（integer、float、string 等），还包括 object_begin、object_end 之类的标志类型，如一个合法的 json token 序列可以是这样：
 
 ```plain
 charactor | token_type
@@ -146,12 +145,12 @@ public:
 
 ```json
 {
-    "name": "John",
-    "mother": {
-        "name": "Mary",
-        "age": 50
-    },
-    "age": 18
+  "name": "John",
+  "mother": {
+    "name": "Mary",
+    "age": 50
+  },
+  "age": 18
 }
 ```
 

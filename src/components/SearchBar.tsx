@@ -6,7 +6,7 @@ import type { BlogFrontmatter } from "@content/_schemas";
 
 export type SearchItem = {
   title: string;
-  description: string;
+  description?: string;
   data: BlogFrontmatter;
 };
 
