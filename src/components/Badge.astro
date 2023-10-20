@@ -1,0 +1,33 @@
+---
+export interface Props {
+  label?: string;
+  bgColor: string;
+  logo?: string;
+  logoColor?: string;
+  link?: string;
+}
+
+const { logo, label, bgColor, logoColor = "white", link } = Astro.props;
+
+function queryParam(name: string, value?: string) {
+  return value ? `&${name}=${value}` : "";
+}
+---
+
+<img
+  class="badge-icon"
+  src={`https://img.shields.io/badge/${encodeURIComponent(
+    label ?? logo ?? ""
+  )}-${bgColor}?style=for-the-badge${
+    queryParam("logo", logo) +
+    queryParam("logoColor", logoColor) +
+    queryParam("link", link)
+  }`}
+  alt={logo || label}
+/>
+
+<style>
+  .badge-icon {
+    @apply inline-block m-0;
+  }
+</style>
