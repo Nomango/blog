@@ -36,7 +36,7 @@ Netlify 是美国的一家云计算公司，它的官网 [Netlify](https://www.n
 
 而且 Netlify 不仅支持`Hexo`这样的博客系统，还支持`gitbook`、`doxygen`等等各式各样的构建工具，比如我搭建的 Kiwano 官网上的用户手册和 API 文档，就是这两种方式生成的，最爽的是完全不需要考虑环境，只要把命令行敲上去，所有的环境都给你一键配置好。
 
-![写两行简单命令就可以部署gitbook](/images/2020/publish-your-site-on-netlify-app/gitbook-deploy.png)
+![写两行简单命令就可以部署gitbook](@assets/images/2020/publish-your-site-on-netlify-app/gitbook-deploy.png)
 
 如果你喜欢折腾，还可以配合 LeanCloud 这样的前端数据库实现各种各样的需求，比如给自己的博客加一个评论系统，或者做个游戏排行榜等等。
 
@@ -72,7 +72,7 @@ Netlify 是美国的一家云计算公司，它的官网 [Netlify](https://www.n
 Netlify 支持自动配置 HTTPS，要求是必须使用 Netlify 提供的 DNS 服务，因为这样才能让它为你的域名自动配置 HTTPS 证书。
 一般在国内购买的域名默认使用的都是国内的 DNS，所以需要到域名管理页面去修改 DNS 服务器
 
-![修改DNS服务器](/images/2020/publish-your-site-on-netlify-app/change-dns.png)
+![修改DNS服务器](@assets/images/2020/publish-your-site-on-netlify-app/change-dns.png)
 
 修改后`Domain Settings`的页面下方会出现开启 HTTPS 的提示。
 

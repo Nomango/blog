@@ -61,7 +61,7 @@ size(arr);  // compile error
 
 发现编译直接报错了，报错信息是参数列表不匹配，不能从 `int[10]` 为 `const int [_Size]` 推导模板参数。更有意思的是，宇宙第一编译器提示我 size 函数的签名是这样的
 
-![IntelliSense](/images/2020/cpp-passing-array-to-functions/IntelliSense.jpg)
+![IntelliSense](@assets/images/2020/cpp-passing-array-to-functions/IntelliSense.jpg)
 
 原来模板实例化以后产生的函数所需参数是 `const int *` 类型的，所以 \_Size 模板参数是无法推导的，所以如果我直接传递一个 \_Size 进去
 
@@ -96,7 +96,7 @@ DoSomething(arr);  // compile success
 
 如果你在网站上直接搜索 `C++传递数组`，大部分资料告诉你的仍然是错误的
 
-![tutorialspoint 教程](/images/2020/cpp-passing-array-to-functions/sized-array.jpg)
-![菜鸟教程](/images/2020/cpp-passing-array-to-functions/sized-array-2.jpg)
+![tutorialspoint 教程](@assets/images/2020/cpp-passing-array-to-functions/sized-array.jpg)
+![菜鸟教程](@assets/images/2020/cpp-passing-array-to-functions/sized-array-2.jpg)
 
 看起来，想要学好 C++还需要一些侦探思维，什么东西都要怀疑一下呢。

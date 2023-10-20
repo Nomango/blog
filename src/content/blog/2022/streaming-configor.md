@@ -97,7 +97,7 @@ public:
 
 `token_type` 不仅仅包含值类型（integer、float、string 等），还包括 object_begin、object_end 之类的标志类型，如一个合法的 json token 序列可以是这样：
 
-```plain
+```
 charactor | token_type
 -------------------------------
 {         > object_begin

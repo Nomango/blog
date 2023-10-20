@@ -30,7 +30,7 @@ json obj = {
 
 造轮子的初衷是在两年前，我记得那天空中都是圆圆的轮状云，突然想给自己的游戏做一个 json 格式的配置文件。当我百度一下 C++ json 库时，被一张图震惊了
 
-![28个C/C++开源JSON库性能对比](/images/2020/jsonxx/json-lib-performance.png)
+![28个C/C++开源JSON库性能对比](@assets/images/2020/jsonxx/json-lib-performance.png)
 
 当然震惊我的不是这些库的性能，而是竟然足足有 28 个比较火的库在互相对比。。还有哪个语言可以做到让这么多人乐此不疲的为了一个小功能写那些重复的逻辑和代码呢？
 
@@ -52,7 +52,7 @@ json obj = {
 
 ## JSONXX
 
-![jsonxx](/images/2020/jsonxx/logo.png)
+![jsonxx](@assets/images/2020/jsonxx/logo.png)
 
 一个为 C++ 量身打造的轻量级 JSON 通用工具，轻松完成 JSON 解析和序列化功能，并和 C++ 输入输出流交互。
 

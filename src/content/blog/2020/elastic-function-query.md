@@ -145,7 +145,7 @@ _score = _score + log(1 + 0.1 * sales)
 
 下图非常直观的展示了属性和公式对衰减的影响：
 
-![衰减曲线](/images/2020/elastic-function-query/decay_function.png)
+![衰减曲线](@assets/images/2020/elastic-function-query/decay_function.png)
 
 在我们的例子里，衰减函数可以这样设置
 
