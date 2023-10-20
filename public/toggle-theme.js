@@ -32,7 +32,7 @@ function reflectPreference() {
 // set early so no page flashes / CSS is made aware
 reflectPreference();
 
-window.onload = () => {
+document.addEventListener("astro:after-swap", () => {
   // set on load so screen readers can get the latest value on the button
   reflectPreference();
 
@@ -41,7 +41,7 @@ window.onload = () => {
     themeValue = themeValue === "light" ? "dark" : "light";
     setPreference();
   });
-};
+});
 
 // sync with system changes
 window

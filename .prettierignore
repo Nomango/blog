@@ -10,4 +10,5 @@
 !package.json
 !.prettierrc
 !.eslintrc.js
+!tailwind.config.mjs
 !README.md

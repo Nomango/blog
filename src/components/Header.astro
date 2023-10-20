@@ -3,8 +3,9 @@ import { LOGO_IMAGE, SITE } from "@config";
 import Hr from "./Hr.astro";
 import LinkButton from "./LinkButton.astro";
 
-import logoPNG from "/assets/logo.png";
-import logoSVG from "/assets/logo.svg";
+import logoPNG from "../assets/logo.png";
+import logoSVG from "../assets/logo.svg";
+import { Image } from "astro:assets";
 
 export interface Props {
   activeNav?: "posts" | "tags" | "about" | "search";
@@ -20,9 +21,9 @@ const { activeNav } = Astro.props;
       <a href="/" class="logo">
         {
           LOGO_IMAGE.enable ? (
-            <img
-              src={LOGO_IMAGE.svg ? logoSVG : logoPNG}
-              alt="AstroPaper Logo"
+            <Image
+              src={LOGO_IMAGE.svg ? `${logoSVG}` : `${logoPNG}`}
+              alt="Logo"
               width={LOGO_IMAGE.width}
               height={LOGO_IMAGE.height}
             />
@@ -57,7 +58,7 @@ const { activeNav } = Astro.props;
             <line x1="6" y1="6" x2="18" y2="18" class="close"></line>
           </svg>
         </button>
-        <ul id="menu-items" class="display-none sm:flex">
+        <ul id="menu-items" class="display-none">
           <li>
             <a href="/posts" class={activeNav === "posts" ? "active" : ""}>
               Posts
@@ -142,7 +143,7 @@ const { activeNav } = Astro.props;
     @apply flex w-full flex-col items-center bg-skin-fill sm:ml-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0;
   }
   nav ul {
-    @apply mt-4 grid w-44 grid-cols-2 grid-rows-4 gap-x-2 gap-y-2 sm:ml-0 sm:mt-0 sm:w-auto sm:gap-x-5 sm:gap-y-0;
+    @apply mt-4 grid w-44 grid-cols-2 grid-rows-4 gap-x-2 gap-y-2 sm:ml-0 sm:mt-0 sm:w-auto sm:gap-x-5 sm:gap-y-0 sm:flex;
   }
   nav ul li {
     @apply col-span-2 flex items-center justify-center;
