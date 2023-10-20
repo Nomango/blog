@@ -33,5 +33,3 @@ pnpm-debug.log*
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
-
-.vscode/settings.json
