@@ -14,6 +14,9 @@ const { href, frontmatter, secHeading = true } = Astro.props;
 const { title, date: pubDatetime, description } = frontmatter;
 
 const headerProps = {
+  style: {
+    "view-transition-name": `post-${slugifyStr(title)}`,
+  },
   class: "text-lg font-medium decoration-dashed hover:underline",
 };
 ---
@@ -25,13 +28,9 @@ const headerProps = {
   >
     {
       secHeading ? (
-        <h2 {...headerProps} transition:name={slugifyStr(title)}>
-          {title}
-        </h2>
+        <h2 {...headerProps}>{title}</h2>
       ) : (
-        <h3 {...headerProps} transition:name={slugifyStr(title)}>
-          {title}
-        </h3>
+        <h3 {...headerProps}>{title}</h3>
       )
     }
   </a>

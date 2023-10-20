@@ -53,7 +53,12 @@ const ogUrl = new URL(
     </button>
   </div>
   <main id="main-content">
-    <h1 transition:name={slugifyStr(title)} class="post-title">
+    <h1
+      class="post-title"
+      style={{
+        "view-transition-name": `post-${slugifyStr(title)}`,
+      }}
+    >
       {title}
     </h1>
     <Datetime datetime={pubDatetime} size="lg" className="my-2" />
