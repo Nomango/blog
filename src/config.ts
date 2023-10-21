@@ -36,7 +36,7 @@ export const SOCIALS: SocialObjects = [
     name: "Mail",
     href: "mailto:nomango.lhb@gmail.com",
     linkTitle: `Send an email to ${SITE.author}`,
-    active: true,
+    active: false,
   },
   {
     name: "Steam",
@@ -60,6 +60,12 @@ export const SOCIALS: SocialObjects = [
     name: "Weibo",
     href: "https://weibo.com/u/5309142901",
     linkTitle: `${SITE.author} on Weibo`,
+    active: true,
+  },
+  {
+    name: "RSS",
+    href: "/rss.xml",
+    linkTitle: `RSS Feed`,
     active: true,
   },
 ];
