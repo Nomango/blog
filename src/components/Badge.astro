@@ -14,20 +14,19 @@ function queryParam(name: string, value?: string) {
 }
 ---
 
-<img
+<object
   class="badge-icon"
-  src={`https://img.shields.io/badge/${encodeURIComponent(
+  data={`https://img.shields.io/badge/${encodeURIComponent(
     label ?? logo ?? ""
   )}-${bgColor}?style=for-the-badge${
     queryParam("logo", logo) +
     queryParam("logoColor", logoColor) +
     queryParam("link", link)
   }`}
-  alt={logo || label}
 />
 
 <style>
   .badge-icon {
-    @apply inline-block m-0;
+    @apply inline-block mx-0 my-1;
   }
 </style>
