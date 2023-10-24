@@ -1,8 +1,7 @@
 ---
 title: 用户体验第一的现代C++ JSON库
 date: 2020-09-16T17:42:41+08:00
-tags:
-  - Cpp
+tags: [Cpp]
 ---
 
 话不多说，先上 code！

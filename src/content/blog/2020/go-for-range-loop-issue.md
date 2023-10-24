@@ -1,8 +1,7 @@
 ---
 title: 记录一个Go for-range循环的BUG
 date: 2020-09-06T15:38:51+08:00
-tags:
-  - Golang
+tags: [Golang]
 ---
 
 {% note info %}

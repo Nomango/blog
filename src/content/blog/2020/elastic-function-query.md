@@ -1,8 +1,7 @@
 ---
 title: Elastic笔记（一）：Function Score Query
 date: 2020-09-10T15:40:40+08:00
-tags:
-  - ElasticSearch
+tags: [ElasticSearch]
 ---
 
 # 什么是 function score
