@@ -20,6 +20,9 @@ let themeValue = getPreferTheme();
 
 function setPreference() {
   localStorage.setItem("theme", themeValue);
+  document.dispatchEvent(
+    new CustomEvent("themechange", { detail: themeValue })
+  );
   reflectPreference();
 }
 
@@ -49,23 +52,19 @@ function reflectPreference() {
 // set early so no page flashes / CSS is made aware
 reflectPreference();
 
-window.onload = () => {
-  function setThemeFeature() {
-    // set on load so screen readers can get the latest value on the button
-    reflectPreference();
+function onPageReload() {
+  // set on load so screen readers can get the latest value on the button
+  reflectPreference();
 
-    // now this script can find and listen for clicks on the control
-    document.querySelector("#theme-btn")?.addEventListener("click", () => {
-      themeValue = themeValue === "light" ? "dark" : "light";
-      setPreference();
-    });
-  }
+  // now this script can find and listen for clicks on the control
+  document.querySelector("#theme-btn")?.addEventListener("click", () => {
+    themeValue = themeValue === "light" ? "dark" : "light";
+    setPreference();
+  });
+}
 
-  setThemeFeature();
-
-  // Runs on view transitions navigation
-  document.addEventListener("astro:after-swap", setThemeFeature);
-};
+document.addEventListener("astro:page-load", onPageReload, { once: true });
+document.addEventListener("astro:after-swap", onPageReload);
 
 // sync with system changes
 window

@@ -11,12 +11,44 @@ const { slug } = Astro.props;
   repo="Nomango/blog"
   issue-term={`[${slug}]`}
   label="✨💬✨"
-  theme="preferred-color-scheme"
+  theme="github-light"
   crossorigin="anonymous"
   async></script>
 
-<style is:global>
-  .utterances .timeline-header {
-    display: none;
+<script>
+  function changeUtterancesTheme(theme: "github-dark" | "github-light") {
+    if (document.querySelector(".utterances-frame")) {
+      const message = {
+        type: "set-theme",
+        theme: theme,
+      };
+      const iframe = document.querySelector(
+        ".utterances-frame"
+      ) as HTMLIFrameElement;
+      try {
+        iframe?.contentWindow?.postMessage(message, "https://utteranc.es");
+      } catch {}
+    }
   }
-</style>
+
+  window.addEventListener("message", (e: any) => {
+    if (e.origin !== "https://utteranc.es") return;
+    if (e.data && e.data.type === "resize") {
+      // reset theme
+      changeUtterancesTheme(
+        document.firstElementChild?.getAttribute("data-theme") === "dark"
+          ? "github-dark"
+          : "github-light"
+      );
+    }
+  });
+
+  document.addEventListener(
+    "themechange",
+    (e: CustomEvent<"light" | "dark">) => {
+      changeUtterancesTheme(
+        e.detail === "dark" ? "github-dark" : "github-light"
+      );
+    }
+  );
+</script>
