@@ -1,5 +1,4 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
@@ -7,11 +6,10 @@ import LinkButton from "@components/LinkButton.astro";
 import Hr from "@components/Hr.astro";
 import Card from "@components/Card.astro";
 import Socials from "@components/Socials.astro";
-import getSortedPosts from "@utils/getSortedPosts";
-import slugify from "@utils/slugify";
 import { SOCIALS } from "@config";
+import getPosts, { getSortedPosts } from "@utils/getPosts";
 
-const posts = await getCollection("blog");
+const posts = await getPosts();
 
 const sortedPosts = getSortedPosts(posts);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
@@ -25,9 +23,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
     <section id="hero">
       <h1 class="mr-2">Hi,there</h1>
 
-      <p>
-        欢迎光临我的博客。
-      </p>
+      <p>欢迎光临我的博客。</p>
       <!-- <p>
         Read the blog posts or check
         <LinkButton
@@ -56,12 +52,8 @@ const socialCount = SOCIALS.filter(social => social.active).length;
           <section id="featured">
             <h2>Featured</h2>
             <ul>
-              {featuredPosts.map(({ data }) => (
-                <Card
-                  href={`/posts/${slugify(data)}`}
-                  frontmatter={data}
-                  secHeading={false}
-                />
+              {featuredPosts.map(post => (
+                <Card post={post} secHeading={false} />
               ))}
             </ul>
           </section>
@@ -77,14 +69,8 @@ const socialCount = SOCIALS.filter(social => social.active).length;
           sortedPosts
             .filter(({ data }) => !data.featured)
             .map(
-              ({ data }, index) =>
-                index < 4 && (
-                  <Card
-                    href={`/posts/${slugify(data)}`}
-                    frontmatter={data}
-                    secHeading={false}
-                  />
-                )
+              (post, index) =>
+                index < 4 && <Card post={post} secHeading={false} />
             )
         }
       </ul>

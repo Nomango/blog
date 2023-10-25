@@ -1,7 +1,6 @@
 ---
 title: 将configor重构为流式调用
 date: 2022-10-10T15:25:00+08:00
-postSlug: streaming-configor
 tags: [Cpp]
 ---
 

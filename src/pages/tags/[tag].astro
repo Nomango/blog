@@ -1,23 +1,25 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Main from "@layouts/Main.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import Card from "@components/Card.astro";
 import getUniqueTags from "@utils/getUniqueTags";
-import getPostsByTag from "@utils/getPostsByTag";
 import slugify, { slugifyStr } from "@utils/slugify";
 import { SITE } from "@config";
-import getSortedPosts from "@utils/getSortedPosts";
+import getPosts, {
+  getPostsByTag,
+  getSortedPosts,
+  type Post,
+} from "@utils/getPosts";
 
 export interface Props {
-  post: CollectionEntry<"blog">;
+  post: Post;
   tagName: string;
 }
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
+  const posts = await getPosts();
 
   const tags = getUniqueTags(posts);
 
@@ -33,7 +35,7 @@ const { tagName } = Astro.props;
 
 const tag = slugifyStr(tagName);
 
-const posts = await getCollection("blog", ({ data }) => !data.draft);
+const posts = await getPosts();
 
 const tagPosts = getPostsByTag(posts, tag);
 
@@ -49,11 +51,7 @@ const sortTagsPost = getSortedPosts(tagPosts);
   >
     <h1 slot="title" transition:name={tag}>{`Tag:${tagName}`}</h1>
     <ul>
-      {
-        sortTagsPost.map(({ data }) => (
-          <Card href={`/posts/${slugify(data)}`} frontmatter={data} />
-        ))
-      }
+      {sortTagsPost.map(post => <Card post={post} />)}
     </ul>
   </Main>
   <Footer />

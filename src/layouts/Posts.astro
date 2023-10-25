@@ -7,12 +7,12 @@ import Footer from "@components/Footer.astro";
 import Card from "@components/Card.astro";
 import LinkButton from "@components/LinkButton.astro";
 import slugify from "@utils/slugify";
-import type { CollectionEntry } from "astro:content";
+import type { Post } from "@utils/getPosts";
 
 export interface Props {
   pageNum: number;
   totalPages: number;
-  posts: CollectionEntry<"blog">[];
+  posts: Post[];
 }
 
 const { pageNum, totalPages, posts } = Astro.props;
@@ -25,11 +25,7 @@ const next = pageNum < totalPages ? "" : "disabled";
   <Header activeNav="posts" />
   <Main pageTitle="Posts" pageDesc="All the articles I've posted.">
     <ul>
-      {
-        posts.map(({ data }) => (
-          <Card href={`/posts/${slugify(data)}`} frontmatter={data} />
-        ))
-      }
+      {posts.map(post => <Card post={post} />)}
     </ul>
   </Main>
 

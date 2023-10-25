@@ -1,36 +1,36 @@
 ---
-import { slugifyStr } from "@utils/slugify";
+import slugify from "@utils/slugify";
 import Datetime from "./Datetime";
-import type { CollectionEntry } from "astro:content";
+import type { Post } from "@utils/getPosts";
 
 export interface Props {
-  href?: string;
-  frontmatter: CollectionEntry<"blog">["data"];
+  post: Post;
   secHeading?: boolean;
 }
 
-const { href, frontmatter, secHeading = true } = Astro.props;
+const { post, secHeading = true } = Astro.props;
 
-const { title, date: pubDatetime, description } = frontmatter;
+const { title, date: pubDatetime, description } = post.data;
 
 const headerProps = {
-  style: {
-    "view-transition-name": `post-${slugifyStr(title)}`,
-  },
   class: "text-lg font-medium decoration-dashed hover:underline",
 };
 ---
 
 <li class="my-6">
   <a
-    href={href}
+    href={`/posts/${slugify(post)}`}
     class="inline-block text-lg font-medium text-skin-accent decoration-dashed underline-offset-4 focus-visible:no-underline focus-visible:underline-offset-0"
   >
     {
       secHeading ? (
-        <h2 {...headerProps}>{title}</h2>
+        <h2 {...headerProps} transition:name={`post-${slugify(post)}`}>
+          {title}
+        </h2>
       ) : (
-        <h3 {...headerProps}>{title}</h3>
+        <h3 {...headerProps} transition:name={`post-${slugify(post)}`}>
+          {title}
+        </h3>
       )
     }
   </a>

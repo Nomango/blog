@@ -4,11 +4,11 @@ import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import Tag from "@components/Tag.astro";
 import Datetime from "@components/Datetime";
-import type { CollectionEntry } from "astro:content";
-import { slugifyStr } from "@utils/slugify";
+import slugify from "@utils/slugify";
+import type { Post } from "@utils/getPosts";
 
 export interface Props {
-  post: CollectionEntry<"blog">;
+  post: Post;
 }
 
 const { post } = Astro.props;
@@ -27,7 +27,7 @@ const { Content } = await post.render();
 
 const ogImageUrl = typeof ogImage === "string" ? ogImage : ogImage?.src;
 const ogUrl = new URL(
-  ogImageUrl ?? `/posts/${slugifyStr(title)}.png`,
+  ogImageUrl ?? `/posts/${slugify(post)}.png`,
   Astro.url.origin
 ).href;
 ---
@@ -53,12 +53,7 @@ const ogUrl = new URL(
     </button>
   </div>
   <main id="main-content">
-    <h1
-      class="post-title"
-      style={{
-        "view-transition-name": `post-${slugifyStr(title)}`,
-      }}
-    >
+    <h1 class="post-title" transition:name={`post-${slugify(post)}`}>
       {title}
     </h1>
     <Datetime datetime={pubDatetime} size="lg" className="my-2" />
