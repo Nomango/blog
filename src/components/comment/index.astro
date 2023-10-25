@@ -1,0 +1,16 @@
+---
+import GitalkComment from "@components/comment/Gitalk";
+import UtterancesComment from "@components/comment/Utterances.astro";
+
+export interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<section class="mt-16 p-0">
+  <!-- <h2 class="inline-block text-xl font-medium text-skin-base">Comments</h2> -->
+  <!-- <GitalkComment client:only slug={slug} /> -->
+  <UtterancesComment slug={slug} />
+</section>

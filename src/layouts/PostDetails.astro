@@ -3,6 +3,7 @@ import Layout from "@layouts/Layout.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import Tag from "@components/Tag.astro";
+import Comment from "@components/comment/index.astro";
 import Datetime from "@components/Datetime";
 import slugify from "@utils/slugify";
 import type { Post } from "@utils/getPosts";
@@ -64,6 +65,8 @@ const ogUrl = new URL(
     <ul class="tags-container">
       {tags.map(tag => <Tag name={tag} />)}
     </ul>
+
+    <Comment slug={slugify(post)} />
   </main>
   <Footer />
 </Layout>

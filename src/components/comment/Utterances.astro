@@ -1,0 +1,22 @@
+---
+export interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<script
+  src="https://utteranc.es/client.js"
+  repo="Nomango/blog"
+  issue-term={`[${slug}]`}
+  label="✨💬✨"
+  theme="preferred-color-scheme"
+  crossorigin="anonymous"
+  async></script>
+
+<style is:global>
+  .utterances .timeline-header {
+    display: none;
+  }
+</style>

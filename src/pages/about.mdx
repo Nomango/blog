@@ -6,6 +6,7 @@ title: "About"
 import { Image } from "astro:assets";
 import Badge from "@components/Badge.astro";
 import Socials from "@components/Socials.astro";
+import Comment from "@components/comment/index.astro";
 import picture from "@assets/images/me/sichuan-west-travel-2.png";
 
 <Image src={picture} class="mx-auto rounded-2xl sm:w-1/2" alt="" />
@@ -157,3 +158,5 @@ import picture from "@assets/images/me/sichuan-west-travel-2.png";
   label="Figma"
   link="https://www.figma.com"
 />
+
+<Comment slug="about" />
