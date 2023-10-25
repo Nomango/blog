@@ -3,7 +3,7 @@ import type { Post } from "@utils/getPosts";
 import Posts from "@layouts/Posts.astro";
 import PostDetails from "@layouts/PostDetails.astro";
 import getPageNumbers from "@utils/getPageNumbers";
-import { getPostSlugs } from "@utils/slugify";
+import slugify, { getPostSlugs } from "@utils/slugify";
 import { SITE } from "@config";
 import getPosts, { getSortedPosts } from "@utils/getPosts";
 
@@ -35,6 +35,10 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 const { post } = Astro.props;
+
+if (post && slug !== slugify(post)) {
+  return Astro.redirect(`/posts/${slugify(post)}`, 302);
+}
 
 const posts = await getPosts();
 

@@ -9,7 +9,7 @@ export const getPostSlugs = (post: Post) => {
   return [
     post.slug.slice(post.slug.lastIndexOf("/") + 1),
     slugger(post.data.title),
-    ...(post.data.alias || []),
+    ...(post.data.aliases || []),
   ];
 };
 

@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { generateOgImageForPost } from "@utils/generateOgImages";
-import { getPostSlugs } from "@utils/slugify";
+import slugify from "@utils/slugify";
 import getPosts, { type Post } from "@utils/getPosts";
 
 export async function getStaticPaths() {
@@ -8,18 +8,10 @@ export async function getStaticPaths() {
     p.filter(({ data }) => !data.ogImage)
   );
 
-  return posts.reduce(
-    (all, post) => {
-      return [
-        ...all,
-        ...getPostSlugs(post).map(slug => ({
-          params: { slug },
-          props: { post },
-        })),
-      ];
-    },
-    [] as { params: any; props: { post: Post } }[]
-  );
+  return posts.map(post => ({
+    params: { slug: slugify(post) },
+    props: { post },
+  }));
 }
 
 export const GET: APIRoute = async ({ props }) =>
