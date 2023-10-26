@@ -1,0 +1,10 @@
+---
+title: 使用 Docker Swarm 部署服务集群
+date: 2023-08-24T14:47:00+08:00
+tags: [Docker, Docker Swarm, Microservice]
+draft: true
+---
+
+[Docker Swarm](https://docs.docker.com/engine/swarm/) 在今天已经是个面临淘汰的技术，但任何技术都有其独特的发挥空间，目前它仍然是一个快速部署一个小服务集群的不错选择。
+
+我们的服务因为流量比较平稳，没有突发增长之类需要紧急扩缩容的情况，也不需要微服务治理，所以一直没有上 k8s，觉得有点大材小用。从年初我将所有服务迁移到 `Docker Swarm` 以来，服务一直运行很稳定，还没有出现因架构问题导致的系统崩溃情况，所以写篇文章记录一下。
