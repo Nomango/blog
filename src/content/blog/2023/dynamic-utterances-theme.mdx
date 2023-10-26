@@ -1,0 +1,229 @@
+---
+title: 如何动态调整 Utterances 评论系统的主题
+date: 2023-10-25T18:47:00+08:00
+tags: [Astro, React]
+---
+
+## 目录
+
+## 解决思路
+
+最近在给我的博客接入评论系统，因为只考虑基于 Github Issue 的评论框架，最后决定在 [Gitalk](https://github.com/gitalk/gitalk) 和 [Utterances](https://github.com/utterance/utterances) 中选一个。之前用过一段时间 Gitalk，当时没有设置每篇文章的 id，结果现在更改域名以后全都识别不了了，折腾了一会儿没解决，再加上它对 ts 和 React 的支持并不好，所以决定尝试一下 Utterances。
+
+`Utterances` 用在静态博客上还是非常简单易用的，一个 script 标签就可以解决，它还做了一个[配置生成器](https://utteranc.es/)，只需要把下面的代码加入到网页中就可以用了
+
+```html
+<script
+  src="https://utteranc.es/client.js"
+  repo="owner/repo"
+  issue-term="pathname"
+  label="✨💬✨"
+  theme="github-light"
+  crossorigin="anonymous"
+  async
+></script>
+```
+
+因为我的博客有切换 `light` 和 `dark` 主题色的功能，于是想让 Utterances 也随博客主题一起变化。想实现的最终效果是这样的：
+
+![最终效果](@assets/images/2023/dynamic-utterances-theme/preview.gif)
+
+我想应该有人和我遇到一样的问题，于是在 utterances 的 [issue#549](https://github.com/utterance/utterances/issues/549#issuecomment-907606127) 里找到了一个解决方法，使用 `iframe.postMessage()` 给评论子窗口发送消息，可以实现动态变化。
+
+确实是不错的解决办法，但是如何在页面第一次加载的时候就设置正确的主题呢？server 渲染时还不知道 client 使用什么主题，所以没办法直接初始化 script 标签里的变量。难道只能写一段 client js，动态生成这个 script 标签吗？感觉有些丑陋。
+
+于是我决定看看它的 script 在做什么，可以看到 `theme` 是它的一个 attribute，把脚本下载下来发现其实它拼凑了一个 `iframe` 的 url 链接，然后插入到 document 中，像下面这段代码。
+
+```html
+<iframe
+  className="utterances-frame"
+  src="https://xxxxxxx.com?theme=github-light"
+  scrolling="no"
+  loading="lazy"
+></iframe>
+```
+
+这个 theme 是 iframe url 的一个查询参数，所以只要拼凑出符合规则的链接就可以避免使用它的 script sdk 了，然后就可以将 js 变量插入到 iframe src 里。
+
+那直接修改这个 url 的参数是不是就可以做到动态修改主题了？虽然可以，但是 url 变化会导致 iframe 整体重新加载，对我这种强迫症来说不能接受，还是要用 `iframe.postMessage()` 来实现动态修改。
+
+## React 版本实现
+
+于是实现了一个 React 版本的动态主题 `utterances`，贴代码
+
+```jsx
+// Utterances.tsx
+import { useEffect, useMemo, useRef, useState } from "react";
+import "./Utterances.css";
+
+// NOTICE: 自定义配置项
+const config = {
+  repo: "YOUR/REPO",
+  "issue-term": "pathname",
+  label: "✨💬✨",
+  crossorigin: "anonymous",
+};
+
+export default function UtterancesComment() {
+  const elementRef = useRef<HTMLIFrameElement>(null);
+  const [height, setHeight] = useState<number>();
+
+  const changeTheme = (theme: string) => {
+    elementRef.current?.contentWindow?.postMessage(
+      {
+        type: "set-theme",
+        theme: theme,
+      },
+      "https://utteranc.es"
+    );
+  };
+
+  useEffect(() => {
+    window.addEventListener("message", (e: any) => {
+      if (e.origin !== "https://utteranc.es") return;
+      if (e.data && e.data.type === "resize" && e.data.height) {
+        setHeight(e.data.height);
+      }
+    });
+
+    // NOTICE: 监听主题变化
+    document.addEventListener(
+      "themechange",
+      (e: CustomEvent<"light" | "dark">) => {
+        changeTheme(e.detail === "dark" ? "github-dark" : "github-light");
+      }
+    );
+  }, []);
+
+  const params = useMemo(() => {
+    // NOTICE: 初次加载时获取主题
+    const initTheme =
+      document.firstElementChild?.getAttribute("data-theme") === "dark"
+        ? "github-dark"
+        : "github-light";
+
+    const url = new URL(location.href);
+    const desc = document.querySelector("meta[name='description']");
+    const ogTitle = document.querySelector(
+      "meta[property='og:title'],meta[name='og:title']"
+    );
+
+    const options: Record<string, any> = {
+      ...config,
+      src: "https://utteranc.es/client.js",
+      theme: initTheme,
+      url: url.origin + url.pathname + url.search,
+      origin: url.origin,
+      pathname:
+        url.pathname.length < 2
+          ? "index"
+          : url.pathname.substr(1).replace(/\.\w+$/, ""),
+      title: document.title,
+      description: desc?.getAttribute("content") || "",
+      "og:title": ogTitle?.getAttribute("content") || "",
+    };
+    return new URLSearchParams(options);
+  }, []);
+  return (
+    <div className="utterances" style={{ height: `${height}px` }}>
+      <iframe
+        ref={elementRef}
+        className="utterances-frame"
+        title="Comments"
+        src={`https://utteranc.es/utterances.html?${params}`}
+        scrolling="no"
+        loading="lazy"
+      ></iframe>
+    </div>
+  );
+}
+
+```
+
+```css
+/* Utterances.css */
+.utterances {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.utterances-frame {
+  color-scheme: light;
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 1px;
+  min-width: 100%;
+  max-width: 100%;
+  height: 100%;
+  border: 0;
+}
+```
+
+使用时只需要把这个组件放到需要的地方就可以了
+
+```jsx
+import UtterancesComment from "@components/Utterances";
+
+<UtterancesComment />;
+```
+
+其中写了 NOTICE 注释的几处代码是需要根据自己的情况改的，我用的是 `astro` 框架，修改主题会触发一个 `CustomEvent`，所以在 `React` 代码里是监听了这个事件来处理的。
+
+## Astro 版本实现
+
+在写 React 这段代码的时候我发现 `utterances` 初始化完成后会给 `window` 发送一个 `resize` 消息，那其实就可以通过这个消息判断它初始化完成了，不需要在 server 端知道初始化主题。
+
+于是又写了一个简化版的 `astro` 实现，贴代码：
+
+```astro
+<script
+  src="https://utteranc.es/client.js"
+  repo="YOUR/repo"
+  issue-term="pathname"
+  label="✨💬✨"
+  theme="github-light"
+  crossorigin="anonymous"
+  async></script>
+
+<script>
+  function changeUtterancesTheme(theme: "github-dark" | "github-light") {
+    if (document.querySelector(".utterances-frame")) {
+      const message = {
+        type: "set-theme",
+        theme: theme,
+      };
+      const iframe = document.querySelector(
+        ".utterances-frame"
+      ) as HTMLIFrameElement;
+      try {
+        iframe?.contentWindow?.postMessage(message, "https://utteranc.es");
+      } catch {}
+    }
+  }
+
+  window.addEventListener("message", (e: any) => {
+    if (e.origin !== "https://utteranc.es") return;
+    if (e.data && e.data.type === "resize") {
+      // reset theme
+      changeUtterancesTheme(
+        document.firstElementChild?.getAttribute("data-theme") === "dark"
+          ? "github-dark"
+          : "github-light"
+      );
+    }
+  });
+
+  document.addEventListener(
+    "themechange",
+    (e: CustomEvent<"light" | "dark">) => {
+      changeUtterancesTheme(
+        e.detail === "dark" ? "github-dark" : "github-light"
+      );
+    }
+  );
+</script>
+```
