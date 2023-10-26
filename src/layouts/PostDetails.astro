@@ -57,14 +57,22 @@ const ogUrl = new URL(
     <h1 class="post-title" transition:name={`post-${slugify(post)}`}>
       {title}
     </h1>
-    <Datetime datetime={pubDatetime} size="lg" className="my-2" />
+
+    <div class="flex gap-6">
+      <Datetime
+        datetime={pubDatetime}
+        size="lg"
+        className="my-2"
+      />
+
+      <ul class="tags-container">
+        {tags.map(tag => <Tag name={tag} />)}
+      </ul>
+    </div>
+
     <article id="article" role="article" class="prose mx-auto mt-8 max-w-3xl">
       <Content />
     </article>
-
-    <ul class="tags-container">
-      {tags.map(tag => <Tag name={tag} />)}
-    </ul>
 
     <Comment slug={slugify(post)} />
   </main>
@@ -79,6 +87,6 @@ const ogUrl = new URL(
     @apply text-2xl font-semibold text-skin-accent;
   }
   .tags-container {
-    @apply my-8;
+    @apply my-0;
   }
 </style>
