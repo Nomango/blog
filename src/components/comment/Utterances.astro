@@ -17,17 +17,15 @@ const { slug } = Astro.props;
 
 <script>
   function changeUtterancesTheme(theme: "github-dark" | "github-light") {
-    if (document.querySelector(".utterances-frame")) {
+    const iframe = document.querySelector(
+      ".utterances-frame"
+    ) as HTMLIFrameElement;
+    if (iframe) {
       const message = {
         type: "set-theme",
         theme: theme,
       };
-      const iframe = document.querySelector(
-        ".utterances-frame"
-      ) as HTMLIFrameElement;
-      try {
-        iframe?.contentWindow?.postMessage(message, "https://utteranc.es");
-      } catch {}
+      iframe.contentWindow?.postMessage(message, "https://utteranc.es");
     }
   }
 
