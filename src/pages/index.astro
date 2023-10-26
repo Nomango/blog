@@ -70,7 +70,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
             .filter(({ data }) => !data.featured)
             .map(
               (post, index) =>
-                index < 4 && <Card post={post} secHeading={false} />
+                index < 5 && <Card post={post} secHeading={false} />
             )
         }
       </ul>
