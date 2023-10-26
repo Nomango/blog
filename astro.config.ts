@@ -20,11 +20,18 @@ export default defineConfig({
   ],
   markdown: {
     remarkPlugins: [
-      remarkToc,
+      [
+        remarkToc as any,
+        {
+          maxDepth: 3,
+          heading: "(table[ -]of[ -])?contents?|toc|目录",
+        },
+      ],
       [
         remarkCollapse,
         {
-          test: "Table of contents",
+          test: "(table[ -]of[ -])?contents?|toc|目录",
+          summary: (s: string) => "打开" + s,
         },
       ],
     ],
