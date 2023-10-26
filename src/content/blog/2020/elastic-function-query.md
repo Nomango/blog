@@ -1,5 +1,5 @@
 ---
-title: Elastic笔记（一）：Function Score Query
+title: Elastic笔记：Function Score Query
 date: 2020-09-10T15:40:40+08:00
 tags: [ElasticSearch]
 ---
@@ -86,8 +86,8 @@ weight 使用起来最简单，只需要设置一个数字作为权重，文档�
 
 这个查询的计算公式为
 
-```
-_score = _score + log(1 + 0.1 * sales)
+```md
+\_score = \_score + log(1 + 0.1 \* sales)
 ```
 
 ## random_score

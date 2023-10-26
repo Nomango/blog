@@ -1,6 +1,7 @@
 ---
 title: 将configor重构为流式调用
 date: 2022-10-10T15:25:00+08:00
+description: 最近有一个重构 configor 的想法，把它的序列化操作改为流式调用。
 tags: [Cpp]
 ---
 
@@ -27,8 +28,6 @@ json::serializer{}.dump(std::cout, v);  // 通过 json::serializer 进行编码
 ```cpp
 json::istream{ u } >> json::ostream{ std::cout };
 ```
-
-<!-- more -->
 
 这和 std::basic_i/ostream 做的事情很相似，毕竟 `std::cout << 100` 本身就是一种序列化，所以重构时完全可以参考标准 IO 流的实现方式，只不过标准 IO 流传递的是各种 `char` 类型，configor 的流传输一种**不存储具体数据**的中间类型（暂且记为 `token` 类型）。
 
@@ -95,14 +94,14 @@ public:
 
 `token_type` 不仅仅包含值类型（integer、float、string 等），还包括 object_begin、object_end 之类的标志类型，如一个合法的 json token 序列可以是这样：
 
-```
-charactor | token_type
--------------------------------
-{         > object_begin
-"k"       > object_key, string
-:         > object_value
-1         > integer
-}         > object_end
+```md
+## charactor | token_type
+
+{ > object_begin
+"k" > object_key, string
+: > object_value
+1 > integer
+} > object_end
 ```
 
 短短 7 个字符的 json 字符串会被分解成 6 个 token。

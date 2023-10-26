@@ -9,8 +9,6 @@ tags: [Netlify]
 Netlify 是美国的一家云计算公司，它的官网 [Netlify](https://www.netlify.com) 为用户提供静态网页托管功能。
 简单来说，只要你准备好网页代码，不需要购买服务器甚至域名，就可以把你的页面发布到互联网上。所以从定位上来说，它非常适合个人网站搭建，因为它**零经济成本、零学习成本、甚至零风险**。
 
-<!-- more -->
-
 市面上也有其他的静态网页托管网站，比如腾讯云的 WH，阿里云的 OSS，还有各种 Pages 服务，比如 Github Pages、Gitee Pages、Coding Pages 等等，多多少少我都尝试过，但总归是没有 Netlify 好用，下面是一个功能对比表格：
 
 | 功能     | Netlify | 腾讯云 WH        | 阿里云 OSS | GithubPages  | GiteePages |
@@ -24,7 +22,7 @@ Netlify 是美国的一家云计算公司，它的官网 [Netlify](https://www.n
 | 国内速度 | ✔️      | ✔️               | ✔️         | ❌           | ✔️         |
 | 国外速度 | ✔️      | -                | -          | ✔️           | -          |
 
- 我自己是比较喜欢 pages 服务的，但是 github 的网络环境在国内实在是太差了，码云 gitee 的 Pages 服务又做的很烂（亲身体验，3 天一小崩，5 天一大崩，访问速度很不稳定），也正好是因为之前搭建在 Gitee Pages 上的网站又崩了，我才想着去尝试一下 Netlify，那感觉就像是捡到宝了。
+我自己是比较喜欢 pages 服务的，但是 github 的网络环境在国内实在是太差了，码云 gitee 的 Pages 服务又做的很烂（亲身体验，3 天一小崩，5 天一大崩，访问速度很不稳定），也正好是因为之前搭建在 Gitee Pages 上的网站又崩了，我才想着去尝试一下 Netlify，那感觉就像是捡到宝了。
 
 # 用 Netlify 能做些什么
 
