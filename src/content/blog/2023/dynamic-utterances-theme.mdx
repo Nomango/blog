@@ -4,11 +4,15 @@ date: 2023-10-25T18:47:00+08:00
 tags: [Astro, React]
 ---
 
+最近在给我的博客接入评论系统，因为只考虑基于 Github Issue 的评论框架，最后决定在 [Gitalk](https://github.com/gitalk/gitalk) 和 [Utterances](https://github.com/utterance/utterances) 中选一个。之前用过一段时间 Gitalk，当时没有设置每篇文章的 id，结果现在更改域名以后全都识别不了了，折腾了一会儿没解决，再加上它对 ts 和 React 的支持并不好，所以决定尝试一下 Utterances。
+
+因为我的博客有切换 `light` 和 `dark` 主题色的功能，于是想让 Utterances 也随博客主题一起变化。想实现的最终效果是这样的：
+
+![最终效果](@assets/images/2023/dynamic-utterances-theme/preview.gif)
+
 ## 目录
 
 ## 解决思路
-
-最近在给我的博客接入评论系统，因为只考虑基于 Github Issue 的评论框架，最后决定在 [Gitalk](https://github.com/gitalk/gitalk) 和 [Utterances](https://github.com/utterance/utterances) 中选一个。之前用过一段时间 Gitalk，当时没有设置每篇文章的 id，结果现在更改域名以后全都识别不了了，折腾了一会儿没解决，再加上它对 ts 和 React 的支持并不好，所以决定尝试一下 Utterances。
 
 `Utterances` 用在静态博客上还是非常简单易用的，一个 script 标签就可以解决，它还做了一个[配置生成器](https://utteranc.es/)，只需要把下面的代码加入到网页中就可以用了
 
@@ -23,10 +27,6 @@ tags: [Astro, React]
   async
 ></script>
 ```
-
-因为我的博客有切换 `light` 和 `dark` 主题色的功能，于是想让 Utterances 也随博客主题一起变化。想实现的最终效果是这样的：
-
-![最终效果](@assets/images/2023/dynamic-utterances-theme/preview.gif)
 
 我想应该有人和我遇到一样的问题，于是在 utterances 的 [issue#549](https://github.com/utterance/utterances/issues/549#issuecomment-907606127) 里找到了一个解决方法，使用 `iframe.postMessage()` 给评论子窗口发送消息，可以实现动态变化。
 
