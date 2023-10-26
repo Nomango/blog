@@ -4,10 +4,14 @@ date: 2020-09-06T15:38:51+08:00
 tags: [Golang]
 ---
 
-{% note info %}
-**9 月 11 日更新**
-最近发布的`Go 1.14.9`版本已经修复了该 BUG，详情右转 👉[Release History](https://golang.org/doc/devel/release.html#go1.14)。
-{% endnote %}
+import Note from "@components/Note.astro";
+
+<Note type="info" title="9 月 11 日更新">
+最近发布的 `Go 1.14.9` 版本已经修复了该 BUG
+
+详情右转👉 [Release History](https://golang.org/doc/devel/release.html#go1.14)。
+
+</Note>
 
 在 Go 1.13 和 1.14 版本现存一个很玄学的 BUG，在 for 循环中的一个常数会导致无法退出循环，一个简单的示例：
 
@@ -35,8 +39,6 @@ func main() {
 但实际运行发现程序进入死循环，i 无限增长，继续测试发现，把 `i+1` 改成 `i+2`，运行就正常了！
 
 这就很玄学了，循环体内的一个常数导致 for-range 越界了 😳
-
-<!-- more -->
 
 ## BUG 与编译器优化
 

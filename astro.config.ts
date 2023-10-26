@@ -36,7 +36,7 @@ export default defineConfig({
       ],
     ],
     shikiConfig: {
-      theme: "one-dark-pro",
+      theme: "material-theme-palenight",
       wrap: true,
     },
   },
