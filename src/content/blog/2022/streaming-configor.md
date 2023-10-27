@@ -95,13 +95,13 @@ public:
 `token_type` 不仅仅包含值类型（integer、float、string 等），还包括 object_begin、object_end 之类的标志类型，如一个合法的 json token 序列可以是这样：
 
 ```
-## charactor | token_type
-
-{ > object_begin
-"k" > object_key, string
-: > object_value
-1 > integer
-} > object_end
+charactor | token_type
+-------------------------------
+{         > object_begin
+"k"       > object_key, string
+:         > object_value
+1         > integer
+}         > object_end
 ```
 
 短短 7 个字符的 json 字符串会被分解成 6 个 token。
