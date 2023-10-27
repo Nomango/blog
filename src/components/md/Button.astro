@@ -17,7 +17,7 @@ const { href, icon, title } = Astro.props;
   href={href}
   title={title}
 >
-  {icon && <i class={`fab ${icon}`} />}
+  {icon && <i class:list={["fab", icon, "mr-1"]} />}
   {title}
 </a>
 
