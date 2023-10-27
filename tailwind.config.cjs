@@ -66,6 +66,21 @@ module.exports = {
       ],
     },
     // },
+
+    extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            pre: {
+              color: false,
+            },
+            code: {
+              color: false,
+            },
+          },
+        },
+      },
+    },
   },
   plugins: [require("@tailwindcss/typography")],
 };
