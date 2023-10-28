@@ -58,12 +58,8 @@ const ogUrl = new URL(
       {title}
     </h1>
 
-    <div class="flex gap-6">
-      <Datetime
-        datetime={pubDatetime}
-        size="lg"
-        className="my-2"
-      />
+    <div class="my-2 flex flex-col sm:flex-row sm:gap-6">
+      <Datetime datetime={pubDatetime} size="lg" />
 
       <ul class="tags-container">
         {tags.map(tag => <Tag name={tag} />)}
