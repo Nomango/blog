@@ -7,6 +7,7 @@ import Comment from "@components/comment/index.astro";
 import Datetime from "@components/Datetime";
 import slugify from "@utils/slugify";
 import type { Post } from "@utils/getPosts";
+import MediumZoom from "@components/MediumZoom.astro";
 
 export interface Props {
   post: Post;
@@ -41,6 +42,8 @@ const ogUrl = new URL(
   canonicalURL={canonicalURL}
 >
   <Header />
+  <MediumZoom target="main img" />
+
   <div class="mx-auto flex w-full max-w-3xl justify-start px-2">
     <button
       class="focus-outline mb-2 mt-8 flex hover:opacity-75"
