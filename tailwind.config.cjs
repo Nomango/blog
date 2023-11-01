@@ -77,6 +77,8 @@ module.exports = {
             code: {
               color: false,
             },
+            "blockquote p:first-of-type::before": false,
+            "blockquote p:first-of-type::after": false,
           },
         },
       },

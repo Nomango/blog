@@ -28,7 +28,7 @@ export default function Card({ post, secHeading = true }: Props) {
         )}
       </a>
       <Datetime datetime={pubDatetime} />
-      <p>{description}</p>
+      <p className="my-1 opacity-80">{description}</p>
     </li>
   );
 }
