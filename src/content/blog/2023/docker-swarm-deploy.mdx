@@ -1,10 +1,107 @@
 ---
-title: 使用 Docker Swarm 部署服务集群
+title: 如何使用 Docker Swarm 部署服务集群
 date: 2023-08-24T14:47:00+08:00
-tags: [Docker, Docker Swarm, Microservice]
-draft: true
+tags: [Docker, Docker Swarm, DevOps]
+description: 我们的系统属于中小规模，一直没有上 k8s，觉得有点大材小用。从年初我将所有服务迁移到 Docker Swarm 以来，服务一直运行很稳定，还没有出现因架构导致的重大问题，所以写篇文章记录一下。
 ---
 
-[Docker Swarm](https://docs.docker.com/engine/swarm/) 在今天已经是个面临淘汰的技术，但任何技术都有其独特的发挥空间，目前它仍然是一个快速部署一个小服务集群的不错选择。
+import Note from "@components/md/Note.astro";
 
-我们的服务因为流量比较平稳，没有突发增长之类需要紧急扩缩容的情况，也不需要微服务治理，所以一直没有上 k8s，觉得有点大材小用。从年初我将所有服务迁移到 `Docker Swarm` 以来，服务一直运行很稳定，还没有出现因架构问题导致的系统崩溃情况，所以写篇文章记录一下。
+# 目录
+
+# 什么是 Docker Swarm
+
+[Docker Swarm](https://docs.docker.com/engine/swarm/) 是内置在 `Docker` 中的容器集群编排工具，它为 `Docker` 补足了服务治理方面的能力，提供了路由网格、服务发现、负载均衡、动态伸缩、滚动更新等功能。
+
+简单来说，如果你有很少几个服务运行，那么使用 `Docker` 容器管理应用即可。当你的服务越来越多时，就会需要一个工具来管理所有的容器，而 `Docker Swarm` 就是 `Docker` 内建的一种解决方案。
+
+在 `Kubernetes` 已经成为事实上业界标准的今天，`Docker Swarm` 无论功能还是社区活跃度都无法与之匹敌，但它仍在市场上占有一席之地。根据 `RightScale` 最新的市场统计结果（State of Cloud Report 2023），`Docker Swarm` 是除了 k8s（商业或自建）以外使用率最高的容器管理平台。
+
+![RightScale - State of Cloud Report 2023](@assets/docker-swarm-deploy/image.png)
+
+`Docker Swarm` 相对其他容器编排工具来说有以下几个特点
+
+**原生支持**
+
+Docker Swarm 因为内置在 Docker 中，是可以开箱即用的，安装好了 Docker 就可以立即启动 Swarm 了。
+
+**配置简单清晰**
+
+Docker Swarm 可以通过 `docker-compose.yaml` 清单文件管理服务，如果你之前使用过 `docker compose`，那么只需要添加几行配置就可以把服务部署到 Swarm 中。
+
+相比于学习 Kubernetes 中的一大堆专有名词和“新概念”，Docker Swarm 的学习难度是非常低的。
+
+**兼容 Standalone 容器**
+
+部署在 Docker Swarm 中的服务可以很好的和直接运行在 Docker 上的独立容器共存，所以只将一部分容器服务部署到 Swarm 中也是可以的。
+
+# 快速部署
+
+## 初始化集群
+
+`Docker Swarm` 集群中的主机称为节点 `Node`，他们有两种角色 `Manager` 和 `Worker`，Manager 节点负责将工作负载分发到 Worker 节点上，并且一个集群中可以有多个 Manager 和多个 Worker，它们的关系如下图
+
+![Docker Swarm 中的节点关系](@assets/docker-swarm-deploy/image-1.png)
+
+使用下面的命令初始化一个 `Manager` 节点
+
+```bash
+$ docker swarm init
+```
+
+执行成功后会看到这样一段输出：
+
+```diff
+Swarm initialized: current node (dxn1zxxxxx) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
++    docker swarm join \
++    --token SWMTKN-1-49njxxxxx \
++    192.168.99.100:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+```
+
+把它提示的这行命令在同一个局域网下的其他主机上运行，即可作为 `Worker` 节点加入到集群中
+
+```bash
+$ docker swarm join \
+    --token SWMTKN-1-49njxxxxx \
+    192.168.99.100:2377
+```
+
+<Note type="info">
+  如果你在云上操作，记得在安全组中开放 `2377/tcp` `7946/tcp` `7946/udp`
+  `4789/udp`
+  这几个端口，或者把同一个集群的实例全部加入到同一个安全组中，才可以正常建立
+  Swarm 集群。
+</Note>
+
+## 部署服务
+
+TODO
+
+# 使用清单管理服务
+
+TODO
+
+## 服务发现
+
+## 服务重启
+
+## 滚动更新
+
+## 服务回滚
+
+## 服务健康状态检查
+
+# 废弃 volume 挂载
+
+TODO
+
+## 使用 config 管理配置
+
+## 使用 secret 管理密钥
+
+# 多环境部署
