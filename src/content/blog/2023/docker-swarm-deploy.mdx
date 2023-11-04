@@ -25,9 +25,11 @@ import Note from "@components/md/Note.astro";
 
 Docker Swarm 因为内置在 Docker 中，是可以开箱即用的，安装好了 Docker 就可以立即启动 Swarm 了。
 
-**配置简单清晰**
+**配置简单**
 
 Docker Swarm 可以通过 `docker-compose.yaml` 清单文件管理服务，如果你之前使用过 `docker compose`，那么只需要添加几行配置就可以把服务部署到 Swarm 中。
+
+**学习曲线平滑**
 
 相比于学习 Kubernetes 中的一大堆专有名词和“新概念”，Docker Swarm 的学习难度是非常低的。
 
@@ -39,7 +41,7 @@ Docker Swarm 可以通过 `docker-compose.yaml` 清单文件管理服务，如�
 
 ## 初始化集群
 
-`Docker Swarm` 集群中的主机称为节点 `Node`，他们有两种角色 `Manager` 和 `Worker`，Manager 节点负责将工作负载分发到 Worker 节点上，并且一个集群中可以有多个 Manager 和多个 Worker，它们的关系如下图
+`Docker Swarm` 集群中的主机称为节点 `Node`，他们有两种角色 `Manager` 管理节点和 `Worker` 工作节点，管理节点负责将工作负载分发到工作节点上，并且一个集群中可以有多个 Manager 和多个 Worker，它们的关系如下图
 
 ![Docker Swarm 中的节点关系](@assets/docker-swarm-deploy/image-1.png)
 
@@ -72,21 +74,99 @@ $ docker swarm join \
 ```
 
 <Note type="info">
-  如果你在云上操作，记得在安全组中开放 `2377/tcp` `7946/tcp` `7946/udp`
+  如果是在云上操作，记得在安全组中开放 `2377/tcp` `7946/tcp` `7946/udp`
   `4789/udp`
   这几个端口，或者把同一个集群的实例全部加入到同一个安全组中，才可以正常建立
   Swarm 集群。
 </Note>
 
+查看集群中节点情况
+
+```bash
+$ docker node ls
+ID                            HOSTNAME   STATUS    AVAILABILITY   MANAGER STATUS   ENGINE VERSION
+9j68exjopxe7wfl6yuxml7a7j     worker1    Ready     Active                          20.10.5
+1vyu1dscvcmnoaylch05u7xdd *   manager    Ready     Active         Leader           20.10.5
+```
+
 ## 部署服务
 
-TODO
+使用 `docker service` 命令可以管理 Swarm 服务，在管理节点上执行下面的命令启动一个 `Nginx` 服务
 
-# 使用清单管理服务
+```bash
+$ docker service create --name my_web --replicas 3 -p 8080:80 nginx
+```
 
-TODO
+这样我们就创建了一个具有 3 个实例（有 3 个容器运行）的 nginx 服务，并且开放了容器的 80 端口到**所有节点**的 `8080` 端口上，此时我们访问任何一个节点的 8080 端口，都可以访问到 nginx 服务。
+
+```bash
+# 访问本地的 8080 端口
+$ curl http://127.0.0.1:8080
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+</html>
+```
+
+使用 `service ls` 命令查看刚刚启动的服务
+
+```bash
+$ docker service ls
+ID             NAME     MODE         REPLICAS   IMAGE          PORTS
+od2qgvi81qf5   my_web   replicated   3/3        nginx:latest   *:8080->80/tcp
+```
+
+使用 `service ps` 命令查看服务的具体状态
+
+```bash
+$ docker service ps my_web
+ID             NAME       IMAGE          NODE      DESIRED STATE   CURRENT STATE            ERROR     PORTS
+iqr97uub64o7   my_web.1   nginx:latest   worker1   Running         Running 1 minutes ago
+h3doosl9n0bx   my_web.2   nginx:latest   manager   Running         Running 1 minutes ago
+bkozkbce1wg8   my_web.3   nginx:latest   worker1   Running         Running 1 minutes ago
+```
+
+可以看到这个服务有 3 个实例，在 Swarm 中这些实例叫做 `Task` 任务，管理节点会将任务分配到不同的节点上执行，上面的 `NODE` 列显示的就是任务由哪个节点负责。
+
+![Task、Service和Node之间的关系](@assets/docker-swarm-deploy/image-2.png)
 
 ## 服务发现
+
+当我们访问节点的 8080 端口时，我们实际上连接到了三个实例的其中一个，Swarm 帮我们将请求路由到负载较小的实例上。
+
+具体来说，Swarm 默认的服务发现是通过 `vip` （虚拟 IP）实现的，它根据节点上的连接数量判断节点负载来实现负载均衡，这使客户端的多次请求可能会被不同的实例接收。关于 Swarm 服务发现的更多细节可以在[这里](https://docs.docker.com/engine/swarm/networking/#configure-service-discovery)找到。
+
+<Note type="warning">
+  `Docker Swarm` 的服务发现只适用于外部客户端请求，它并没有很好的实现服务之间的服务发现，例如，service1 通过 `http://service2:80` 访问 service2 时，是直接通过 DNS 获取到一个实例地址的，这个过程不会有负载均衡。
+  <br />
+  不过服务间也可以通过宿主机端口通信，比如 service2 开放了 80 端口到宿主机的 8080 端口上，那么 service1 就可以通过 `http://host.docker.internal:8080` 来访问 service2 了。注意 service1 需要配置 `host.docker.internal:host-gateway` 这个 extra hosts 才可以生效。
+
+</Note>
+
+## 服务日志
+
+使用 `service logs` 命令可以查看服务的日志。服务上多个实例的日志会合并到一起。
+
+```bash
+$ docker service logs my_web
+my_web.2.h3doosl9n0bx@manager    | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+my_web.2.h3doosl9n0bx@manager    | /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+my_web.2.h3doosl9n0bx@manager    | /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+my_web.2.h3doosl9n0bx@manager    | 10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+my_web.2.h3doosl9n0bx@manager    | 10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+my_web.1.iqr97uub64o7@worker1    | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+my_web.1.iqr97uub64o7@worker1    | /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+my_web.1.iqr97uub64o7@worker1    | /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+my_web.1.iqr97uub64o7@worker1    | 10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+my_web.1.iqr97uub64o7@worker1    | 10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+...
+```
+
+# 服务堆栈
+
+## 使用清单文件管理服务
 
 ## 服务重启
 
