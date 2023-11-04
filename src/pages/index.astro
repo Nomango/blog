@@ -21,9 +21,9 @@ const socialCount = SOCIALS.filter(social => social.active).length;
   <Header />
   <main id="main-content">
     <section id="hero">
-      <h1 class="mr-2">Hi,there</h1>
+      <h1 class="!mb-0">值得去的地方都没有捷径。</h1>
 
-      <p>欢迎光临我的博客。</p>
+      <p>The places worth going to are devoid of shortcuts.</p>
       <!-- <p>
         Read the blog posts or check
         <LinkButton
@@ -37,7 +37,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
         // only display if at least one social link is enabled
         socialCount > 0 && (
           <div class="social-wrapper">
-            <div class="social-links">Social Links:</div>
+            <div class="social-links">My Social Links:</div>
             <Socials />
           </div>
         )
@@ -96,7 +96,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
     @apply pb-6 pt-8;
   }
   #hero h1 {
-    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-5xl;
+    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-4xl;
   }
   #hero p {
     @apply my-2;
