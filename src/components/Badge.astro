@@ -12,21 +12,24 @@ const { logo, label, bgColor, logoColor = "white", link } = Astro.props;
 function queryParam(name: string, value?: string) {
   return value ? `&${name}=${value}` : "";
 }
+
+function color(s: string) {
+  return s.replace(/^#/, "");
+}
 ---
 
 <object
   class="badge-icon"
   data={`https://img.shields.io/badge/${encodeURIComponent(
     label ?? logo ?? ""
-  )}-${bgColor}?style=for-the-badge${
+  )}-${color(bgColor)}?style=for-the-badge${
     queryParam("logo", logo) +
-    queryParam("logoColor", logoColor) +
+    queryParam("logoColor", color(logoColor)) +
     queryParam("link", link)
-  }`}
-/>
+  }`}></object>
 
 <style>
   .badge-icon {
-    @apply inline-block !mx-0 !my-1;
+    @apply !mx-0 !my-1 inline-block;
   }
 </style>
