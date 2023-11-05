@@ -194,6 +194,10 @@ services:
 $ docker stack deploy -c docker-compose.yml my-stack
 ```
 
+<Note type="info">
+  如果镜像来自非官方的 registry，需要添加 `--with-registry-auth` 参数。
+</Note>
+
 使用 `stack ls` 命令查看 stack 的概况
 
 ```bash
@@ -206,10 +210,10 @@ my-stack   1          Swarm
 
 ```bash
 $ docker stack ps guet-server-stack
-ID             NAME                         IMAGE          NODE      DESIRED STATE   CURRENT STATE         ERROR     PORTS
-yjkp59sf2ask   my-stack_another_web.1       nginx:latest   worker1   Running         Running 1 minutes ago
-hcee8c0agbaw   my-stack_another_web.2       nginx:latest   manager   Running         Running 1 minutes ago
-j0dax7si8fy4   my-stack_another_web.3       nginx:latest   worker1   Running         Running 1 minutes ago
+ID             NAME                     IMAGE          NODE      DESIRED STATE   CURRENT STATE         ERROR     PORTS
+yjkp59sf2ask   my-stack_another_web.1   nginx:latest   worker1   Running         Running 1 minutes ago
+hcee8c0agbaw   my-stack_another_web.2   nginx:latest   manager   Running         Running 1 minutes ago
+j0dax7si8fy4   my-stack_another_web.3   nginx:latest   worker1   Running         Running 1 minutes ago
 ```
 
 一个 `compose` 文件中可以定义多个服务，例如下面这个 `WordPress` 服务
@@ -260,13 +264,134 @@ networks:
   `db:3306` 访问到它，不需要经过负载均衡。
 </Note>
 
-## 服务重启
+## 服务升级
 
-## 滚动更新
+### 通过命令升级
+
+对于使用 `service create` 创建的服务，我们可以通过 `service update` 命令升级
+
+```bash
+$ docker service update --image nginx:1.25.3-alpine nginx
+```
+
+`--image` 参数指定了服务升级的镜像，还可以通过 `--env-add` `--publish-add` 等参数来更新环境变量、端口等。
+
+其他参数的详细用法可以通过 `docker service update -h` 查看。
+
+### 升级 stack 中的服务
+
+修改 `compose` 文件中的 `image` 字段，然后重新执行 `docker stack deploy` 命令即可。
+
+### 滚动升级
+
+通过指定 `compose` 文件中的 `deploy.update_config` 配置，可以控制滚动更新的行为
+
+```yaml
+deploy:
+  update_config:
+    parallelism: 2 # 每次更新 2 个实例
+    delay: 10s # 每组容器更新后等待 10 秒
+    order: stop-first # 操作的执行顺序
+```
+
+配置的详细说明
+
+- `parallelism`: 每次更新的容器数量
+- `delay`: 每组容器更新后的等待时长
+- `failure_action`: 更新失败后的操作，可选值有 continue（继续更新）rollback（回滚）pause（暂停更新），默认为 pause
+- `monitor`: 更新后检查是否失败的时长（默认为 0）
+- `max_failure_ratio`: 更新期间可容忍的故障率
+- `order`: 操作的执行顺序，可选值有 stop-first（先停止旧实例再启动新实例） start-first（先启动新实例再停止旧实例，运行中的任务会短暂重叠）（默认为 stop-first）
 
 ## 服务回滚
 
-## 服务健康状态检查
+使用 stack 管理服务时一般不需要手动回滚，因为滚动更新配置的 `failure_action` 可以自动回滚有问题的服务。
+
+也可以使用 `service rollback` 命令手动回滚服务
+
+```bash
+$ docker service rollback my-service
+```
+
+回滚时的具体行为可以通过 `compose` 文件的 `deploy.rollback_config` 配置
+
+```yaml
+deploy:
+  rollback_config:
+    parallelism: 2 # 每次回滚 2 个实例
+    delay: 10s # 每组容器回滚后等待 10 秒
+    order: stop-first # 操作的执行顺序
+```
+
+回滚配置和 `update_config` 相同，只有 `failure_action` 字段不可以指定为 `rollback`。
+
+## 服务扩缩容
+
+使用 stack 管理服务时，直接修改 `compose` 文件的 `replicas` 数量然后执行 `docker stack deploy` 即可扩缩容。
+
+使用 `service create` 创建的服务可以通过 `service scale` 对服务进行扩缩容
+
+```bash
+$ docker service scale my-service=10
+```
+
+<Note type="info">Docker Swarm 没有自动扩缩容机制。</Note>
+
+## 服务健康状态
+
+通过指定 `compose` 文件中的 `healthcheck` 配置，可以对服务进行健康状态检查
+
+```yaml
+healthcheck:
+  test: ["CMD", "curl", "-f", "http://localhost"] # 检查健康状态的命令，命令成功则服务健康
+  interval: 1m30s # 健康状态检查的时间间隔
+  timeout: 10s # 命令超时时间
+  retries: 3 # 重试次数
+  start_period: 40s # 服务启动需要的时间
+  start_interval: 5s # 服务启动期间的健康状态检查间隔
+```
+
+对于 http 服务，一个检查服务接口 200 的命令可以是
+
+```yaml
+healthcheck:
+  test: [
+      "CMD-SHELL",
+      "curl -o /dev/null -sw '%{http_code}\n' 127.0.0.1:8000/ping | grep 200",
+    ] # 将 127.0.0.1:8000/ping 替换为服务的实际接口即可
+```
+
+如果镜像中没有 `curl`，也可以使用 `wget` 命令检查
+
+```yaml
+healthcheck:
+  test: [
+      "CMD-SHELL",
+      "wget --spider -S '127.0.0.1:8000/ping' 2>&1 | grep 'HTTP/' | awk '{print $$2}' | grep 200",
+    ] # 将 127.0.0.1:8000/ping 替换为服务的实际接口即可
+```
+
+<Note type="warning">
+  健康状态检查的时间间隔不要设置的过短，建议将 `interval` 设置为 30s
+  或更长，否则可能会导致 CPU 占用过高。  
+  这是 Docker 的 BUG 导致的，具体可以看这两个 Issue
+[moby/moby#39102](https://github.com/moby/moby/issues/39102)
+[moby/moby#39388](https://github.com/moby/moby/issues/39388) 。
+
+</Note>
+
+### 服务重启策略
+
+服务健康检查失败时，Docker Swarm 可以自动重启服务，具体行为可以通过 `compose` 文件中的 `deploy.restart_policy` 配置
+
+```yaml
+deploy:
+  restart_policy:
+    condition: on-failure # 服务健康检查失败时重启
+    delay: 5s # 每次尝试重启的时间间隔
+    max_attempts: 3 # 最大重试次数
+    window: 120s # 确定重启是否成功的等待时长（默认为 0）
+```
 
 # 废弃 volume 挂载
 

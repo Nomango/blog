@@ -23,7 +23,7 @@ export default defineConfig({
       [
         remarkToc as any,
         {
-          maxDepth: 3,
+          maxDepth: 2,
           heading: "(table[ -]of[ -])?contents?|toc|目录",
         },
       ],
