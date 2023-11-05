@@ -31,7 +31,7 @@ Docker Swarm 可以通过 `docker-compose.yaml` 清单文件管理服务，如�
 
 **学习曲线平滑**
 
-相比于学习 Kubernetes 中的一大堆专有名词和“新概念”，Docker Swarm 的学习难度是非常低的。
+因为 Docker Swarm 并没有跳脱出 Docker 这个框架，所以相比于学习 Kubernetes 中的一大堆专有名词和“新概念”，Docker Swarm 的学习难度是非常低的。
 
 **兼容 Standalone 容器**
 
@@ -80,7 +80,7 @@ $ docker swarm join \
   Swarm 集群。
 </Note>
 
-查看集群中节点情况
+使用 `node ls` 命令可以查看集群中节点概况
 
 ```bash
 $ docker node ls
@@ -110,7 +110,7 @@ $ curl http://127.0.0.1:8080
 </html>
 ```
 
-使用 `service ls` 命令查看刚刚启动的服务
+使用 `service ls` 命令查看服务的概况
 
 ```bash
 $ docker service ls
@@ -164,9 +164,101 @@ my_web.1.iqr97uub64o7@worker1    | 10-listen-on-ipv6-by-default.sh: info: Enable
 ...
 ```
 
-# 服务堆栈
+# 服务堆
 
-## 使用清单文件管理服务
+只部署一两个服务时使用 `docker service` 命令很方便，一旦系统中的服务越来越多，我们就需要一个工具来管理服务了。
+
+`docker stack` 就是 Swarm 用来批量管理服务的工具，`docker stack` 之于 service 正如 `docker compose` 之于 container。
+
+## 使用 compose 文件管理服务
+
+通过命令管理服务的方式不仅效率低，也不利于批量管理。`docker stack` 采用 `compose` 文件管理集群配置，例如下面的文件定义了 nginx 服务的各项细节
+
+```yaml
+# docker-compose.yaml
+version: "3.8"
+
+services:
+  another_web:
+    image: nginx
+    ports:
+      - 8080:80
+    deploy:
+      mode: replicated
+      replicas: 3
+```
+
+在这个文件所在目录下，执行下面的命令就可以启动这个 stack
+
+```bash
+$ docker stack deploy -c docker-compose.yml my-stack
+```
+
+使用 `stack ls` 命令查看 stack 的概况
+
+```bash
+$ docker stack ls
+NAME       SERVICES   ORCHESTRATOR
+my-stack   1          Swarm
+```
+
+使用 `stack ps` 命令查看这个 stack 的详细信息
+
+```bash
+$ docker stack ps guet-server-stack
+ID             NAME                         IMAGE          NODE      DESIRED STATE   CURRENT STATE         ERROR     PORTS
+yjkp59sf2ask   my-stack_another_web.1       nginx:latest   worker1   Running         Running 1 minutes ago
+hcee8c0agbaw   my-stack_another_web.2       nginx:latest   manager   Running         Running 1 minutes ago
+j0dax7si8fy4   my-stack_another_web.3       nginx:latest   worker1   Running         Running 1 minutes ago
+```
+
+一个 `compose` 文件中可以定义多个服务，例如下面这个 `WordPress` 服务
+
+```yaml
+version: "3.8"
+
+services:
+  wordpress:
+    image: wordpress
+    ports:
+      - 8080:80
+    networks:
+      - overlay
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+    deploy:
+      mode: replicated
+      replicas: 3
+
+  db:
+    image: mysql:8.0
+    networks:
+      - overlay
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    deploy:
+      mode: global
+
+volumes:
+  db-data:
+networks:
+  overlay:
+```
+
+这个文件定义了一个具有 3 个实例的 wordpress 服务和一个全局唯一实例的 mysql 服务。它们共同加入 `overlay` 这个网络，所以 wordpress 服务可以通过 `db:3306` 地址访问到数据库。
+
+<Note type="info">
+  这里的 `MySQL`
+  服务必须是单一实例，因为没有给它配置主从结构，并且挂载了数据到本地目录。也因此可以直接通过
+  `db:3306` 访问到它，不需要经过负载均衡。
+</Note>
 
 ## 服务重启
 
