@@ -1,0 +1,64 @@
+---
+title: Docker 笔记：如何对 Docker 中的服务做健康状态检查
+date: 2023-10-31 23:13:00 +08:00
+tags: [Docker, Docker Swarm, DevOps]
+description: 学习在 Docker Swarm 中检查服务的健康状态，并处理服务异常。
+---
+
+import Note from "@components/md/Note.astro";
+
+# 服务健康状态
+
+通过指定 `docker-compose` 文件中的 `services.healthcheck` 配置，可以对服务进行健康状态检查
+
+```yaml
+healthcheck:
+  test: ["CMD", "curl", "-f", "http://localhost"] # 检查健康状态的命令，命令成功则服务健康
+  interval: 1m30s # 健康状态检查的时间间隔
+  timeout: 10s # 命令超时时间
+  retries: 3 # 重试次数
+  start_period: 40s # 服务启动需要的时间
+  start_interval: 5s # 服务启动期间的健康状态检查间隔
+```
+
+对于 http 服务，一个检查服务接口 200 的命令可以是
+
+```yaml
+healthcheck:
+  test: [
+      "CMD-SHELL",
+      "curl -o /dev/null -sw '%{http_code}\n' 127.0.0.1:8000/ping | grep 200",
+    ] # 将 127.0.0.1:8000/ping 替换为服务的实际接口即可
+```
+
+如果镜像中没有 `curl`，也可以使用 `wget` 命令检查
+
+```yaml
+healthcheck:
+  test: [
+      "CMD-SHELL",
+      "wget --spider -S '127.0.0.1:8000/ping' 2>&1 | grep 'HTTP/' | awk '{print $$2}' | grep 200",
+    ] # 将 127.0.0.1:8000/ping 替换为服务的实际接口即可
+```
+
+<Note type="warning">
+  健康状态检查的时间间隔不要设置的过短，建议将 `interval` 设置为 30s
+  或更长，否则可能会导致 CPU 占用过高。  
+  这是 Docker 的 BUG 导致的
+[moby/moby#39102](https://github.com/moby/moby/issues/39102)
+[moby/moby#39388](https://github.com/moby/moby/issues/39388) 。
+
+</Note>
+
+# 服务重启策略
+
+对于部署在 `Docker Swarm` 上的服务，可以指定 `compose` 文件中的 `deploy.restart_policy` 配置，使它自动重启异常服务
+
+```yaml
+deploy:
+  restart_policy:
+    condition: on-failure # 服务健康检查失败时重启
+    delay: 5s # 每次尝试重启的时间间隔
+    max_attempts: 3 # 最大重试次数
+    window: 120s # 确定重启是否成功的等待时长（默认为 0）
+```

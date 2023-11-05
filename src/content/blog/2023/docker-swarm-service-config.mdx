@@ -1,0 +1,128 @@
+---
+title: Docker 笔记：Docker Swarm 如何管理分布式集群的配置文件
+date: 2023-11-04 10:30:00 +08:00
+tags: [Docker, Docker Swarm, DevOps]
+description: 在分布式集群上，传统的配置文件分发方式都存在一些问题，所以 Docker Swarm 提供了 docker config 和 docker secret 两种方式来管理分布式集群服务的配置文件。
+---
+
+import Note from "@components/md/Note.astro";
+
+在分布式集群上，传统的配置文件分发方式（打包进镜像、volume挂载、环境变量等）都存在一些问题。试想，如果挂载某个目录为镜像的配置文件目录，那么每一个节点上都要放一个相同的目录上去，而且服务升级时还要同时更新配置文件的目录，这显然增加了工作复杂度。
+
+Docker Swarm 提供了 `docker config` 和 `docker secret` 两种方式来管理分布式集群服务的配置文件。
+
+## 使用 docker config 管理配置
+
+一个简单的例子，给 redis 创建一个 docker config
+
+```bash
+echo "port 6379" | docker config create redis-config -
+```
+
+或者将本地的 `redis.conf` 文件创建为 docker config
+
+```bash
+docker config create redis-config ./redis.conf
+```
+
+创建后，Swarm 集群上的所有节点都可以访问到这个配置文件，下面将配置加入到 `compose` 中
+
+```yaml
+services:
+  redis:
+    image: redis
+    configs:
+      - source: redis-config # 配置名
+        target: /usr/local/etc/redis/redis.conf # 将配置放置到这个路径
+
+configs:
+  redis-config:
+    external: true # 已经在外部由命令行创建好
+```
+
+在执行 `docker stack deploy` 后，配置文件就会在所有节点的所有实例上生效了。
+
+`docker config` 也支持直接在 `compose` 文件中创建，而无需预先执行 `docker config create`，例如：
+
+```yaml
+services:
+  redis:
+    image: redis
+    configs:
+      - source: redis-config
+        target: /usr/local/etc/redis/redis.conf
+
+configs:
+  redis-config:
+    file: ./redis.conf # 在 compose 文件中加载 docker config
+```
+
+## 使用 docker secret 管理密钥
+
+`docker secret` 用来管理服务的敏感数据，包括：
+
+- 用户名和密码
+- TLS 证书和密钥
+- SSH 密钥等
+
+和 `docker config` 类似，使用 `docker secret create` 来创建一个 secret
+
+```bash
+echo "some secret content" | docker secret create my-secret -
+```
+
+或者直接定义在 `compose` 文件中
+
+```yaml
+services:
+  mysql:
+    image: mysql
+    secrets:
+      - my-secret # secret 文件会默认挂载到 /run/secrets/<secret name> 路径
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD_FILE: /run/secrets/my-secret # 使用 secret 作为密码
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/my-secret # 使用 secret 作为密码
+    deploy:
+      mode: global
+
+secrets:
+  my-secret:
+    file: ./secret.txt
+```
+
+<Note type="info">
+  Docker 通过 TLS 加密连接传输 secret 的内容，并存储到加密的 Raft log
+  中。当创建的容器具有 secret 访问权限时，解密的密钥才会被挂载到容器中。
+</Note>
+
+## 配置文件的版本管理
+
+`docker config` 和 `docker secret` 和 volume 挂载有些类似，区别是 config 和 secret 一旦创建就不会再更改了，所以如果想要更新它们，就要执行这几步：
+
+1. 创建 config_v2
+2. 重新 deploy 服务，并使用 config_v2
+3. 删除 config_v1
+
+`compose` 文件支持通过环境变量设置 config 和 secret，例如
+
+```yaml
+secrets:
+  my-secret:
+    name: my-secret-${VERSION} # 通过 VERSION 环境变量设置版本号
+    file: ./secret.txt
+```
+
+我的公司系统将配置文件放到了 github 管理，所以可以通过 git commit id 来作为配置文件版本号：
+
+```bash
+export GIT_REF=$(git rev-parse --short HEAD)
+```
+
+```yaml
+secrets:
+  my-secret:
+    name: my-secret-${GIT_REF}
+    file: ./secret.txt
+```

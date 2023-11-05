@@ -1,6 +1,6 @@
 ---
 title: 将 configor 重构为流式调用
-date: 2022-10-10T15:25:00+08:00
+date: 2022-10-10 15:25:00 +08:00
 description: 最近有一个重构 configor 的想法，把它的序列化操作改为流式调用。
 tags: [Cpp]
 ---

@@ -1,0 +1,124 @@
+---
+title: Docker 笔记：Docker Swarm 部署多环境集群实践
+date: 2023-11-05 15:30:00 +08:00
+tags: [Docker, Docker Swarm, DevOps]
+description: Docker Swarm 部署多环境集群时，服务配置很多都是共用的，如果把每个环境的配置都分别保存未免有些啰嗦，而且一旦有变更就需要修改多个文件，这时就可以对配置文件进行拆分。
+---
+
+一个常见的多环境部署方案是 `local` `staging` `production` 三环境部署。`local` 是开发人员在本地开发和测试使用的，`staging` 是系统预览环境，用来在系统上线前测试并发现问题，`production` 环境则是线上生产环境。
+
+这三个环境很可能只有部分参数不同，例如 replicas 数量、数据库的用户名密码、开放端口等。而不太重要的一些参数（比如滚动更新配置、labels等）很有可能是共用的，如果把每个环境的配置都分别保存为一个 `yaml` 文件未免有些啰嗦，一旦有变更还要修改多个文件。
+
+这时就可以拆分 `compose` 文件，像下面这样
+
+```yaml
+# base.yaml 文件
+version: "3.8"
+
+services:
+  # wordpress 服务的公共配置
+  wordpress:
+    ports:
+      - 8080:80
+    networks:
+      - overlay
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      rollback_config:
+        parallelism: 1
+        delay: 0s
+        monitor: 10s
+        order: stop-first
+      update_config:
+        parallelism: 1
+        delay: 10s
+        monitor: 10s
+        order: start-first
+
+networks:
+  overlay:
+```
+
+```yaml
+# staging.yaml 文件
+version: "3.8"
+
+services:
+  wordpress:
+    image: wordpress # staging 环境使用的镜像版本
+    environment:
+      WORDPRESS_DB_HOST: db:3306 # staging 环境的连接配置
+    deploy:
+      mode: replicated
+      replicas: 1 # staging 环境不需要多个实例
+```
+
+```yaml
+# prod.yaml 文件
+version: "3.8"
+
+services:
+  wordpress:
+    image: wordpress # production 环境使用的镜像版本
+    environment:
+      WORDPRESS_DB_HOST: online-db:3306 # production 环境的连接配置
+    deploy:
+      mode: replicated
+      replicas: 3 # production 环境的实例数量
+```
+
+执行 `docker stack deploy -c base.yaml -c staging.yaml` 命令就是用 staging 环境的配置去部署，它会将 `base.yaml` 和 `staging.yaml` 的内容进行合并。将 `staging.yaml` 替换为 `prod.yaml` 就可以用 production 的配置进行部署了。
+
+另外一个技巧是，如果一个 `compose` 文件定义了多个 service，那不同的 service 也可能有相同的重启策略、回滚策略等，这时可以用 `yaml` 的锚点技巧优化 `compose` 文件定义，例如
+
+```yaml
+# docker-compose.yaml
+version: "3.8"
+
+# 在 docker compose 文件中，以 x- 开头的字段会被识别为变量
+x-deploy-defaults: &deploy-defaults
+  restart_policy:
+    condition: any
+    delay: 5s
+    max_attempts: 3
+    window: 120s
+  rollback_config:
+    parallelism: 1
+    delay: 0s
+    monitor: 10s
+    order: stop-first
+  update_config:
+    parallelism: 1
+    delay: 10s
+    monitor: 10s
+    order: start-first
+
+x-healthcheck-defaults: &healthcheck-defaults
+  interval: 30s
+  timeout: 5s
+  retries: 3
+  start_period: 10s
+
+services:
+  # 第一个服务
+  wordpress:
+    image: wordpress
+    deploy:
+      <<: *deploy-defaults # 插入前面定义的 deploy-defaults 变量
+    healthcheck:
+      <<: *healthcheck-defaults # 插入前面定义的 healthcheck-defaults 变量
+      test: ["CMD", "curl", "-f", "http://localhost"]
+
+  # 第二个服务
+  wordpress-2:
+    image: wordpress
+    deploy:
+      <<: *deploy-defaults # 插入前面定义的 deploy-defaults 变量
+    healthcheck:
+      <<: *healthcheck-defaults # 插入前面定义的 healthcheck-defaults 变量
+      test: ["CMD", "curl", "-f", "http://localhost"]
+```
