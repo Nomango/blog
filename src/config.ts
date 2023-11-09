@@ -54,13 +54,13 @@ export const SOCIALS: SocialObjects = [
     name: "Zhihu",
     href: "https://www.zhihu.com/people/nom-",
     linkTitle: `${SITE.author} on Zhihu`,
-    active: false,
+    active: true,
   },
   {
     name: "Weibo",
     href: "https://weibo.com/u/5309142901",
     linkTitle: `${SITE.author} on Weibo`,
-    active: true,
+    active: false,
   },
   {
     name: "RSS",
