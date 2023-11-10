@@ -13,11 +13,11 @@ description: 最近在关注基于 Nuxt3 框架搭建的前端项目优化，包
 
 移动端：
 
-![PageSpeed Report on Mobile](@assets/nuxt-best-practices/image.png)
+![PageSpeed Report on Mobile](@assets/nuxt3-optimization/image.png)
 
 PC 端：
 
-![PageSpeed Report on PC](@assets/nuxt-best-practices/image-1.png)
+![PageSpeed Report on PC](@assets/nuxt3-optimization/image-1.png)
 
 不管是移动端和 PC 端都有很大提升空间，`PageSpeed` 很贴心的给出了优化建议，下面就一项一项进行优化。
 
@@ -29,7 +29,7 @@ PC 端：
 
 PageSpeed 报告显示有一个 660 Kb 左右（gzip压缩后）比较大的 `entry.js`
 
-![比较大的 entry.js 文件](@assets/nuxt-best-practices/image-2.png)
+![比较大的 entry.js 文件](@assets/nuxt3-optimization/image-2.png)
 
 `Nuxt3` 自带了构建分析工具，通过下面的配置打开
 
@@ -46,7 +46,7 @@ export default defineNuxtConfig({
 
 执行 `build` 任务后，会在项目根目录生成一个 `stats.html` 文件，它就是构建分析结果，打开它
 
-![优化前的构建分析报告](@assets/nuxt-best-practices/image-3.png)
+![优化前的构建分析报告](@assets/nuxt3-optimization/image-3.png)
 
 可以看到最明显的是 `virtual:svg-icons-register` 占据了 `entry.js` 的半壁江山，它是 [vite-plugin-svg-icons](https://www.npmjs.com/package/vite-plugin-svg-icons) 这个插件注入的，由于项目在 plugin 中引入了这个包，这个包直接将 svg 文件导入到 js 中，而且 plugin 最终会打包进 entry.js 这个文件，所以变成了这个结果。
 
@@ -72,7 +72,7 @@ export default defineNuxtConfig({
 
 PageSpeed 显示，`gtag`、`gtm` 等运营分析相关的 js 脚本阻塞的网页加载
 
-![无关 js 阻塞了网页加载](@assets/nuxt-best-practices/image-4.png)
+![无关 js 阻塞了网页加载](@assets/nuxt3-optimization/image-4.png)
 
 对于这样的 js 脚本，可以在 `<script>` 标签中添加 `defer` 和 `async` 属性来告诉浏览器不要等待脚本。
 
@@ -88,7 +88,7 @@ PageSpeed 显示，`gtag`、`gtm` 等运营分析相关的 js 脚本阻塞的网
 
 现在大部分 CDN 都已经支持开启 `gzip` 压缩选项，比如阿里云：
 
-![阿里云 CDN 的压缩选项](@assets/nuxt-best-practices/image-5.png)
+![阿里云 CDN 的压缩选项](@assets/nuxt3-optimization/image-5.png)
 
 使用 `Nginx` 也可以轻松开启 `gzip` 压缩
 
@@ -105,7 +105,7 @@ http {
 
 现在在云服务商配置一个 CDN 已经是非常常见且简单的操作了，需要注意的只有国内使用 CDN 一般需要备案，另外可以配置合理的缓存配置，并开启 `HTTP 2.0` 以进一步优化。
 
-![HTTP 2.0 配置](@assets/nuxt-best-practices/image-6.png)
+![HTTP 2.0 配置](@assets/nuxt3-optimization/image-6.png)
 
 # 静态资源优化
 
@@ -137,11 +137,11 @@ server {
 
 网站使用的字体是 `ttf` 格式，各种字形加起来大约有 240 Kb，不算很大但仍有优化的空间
 
-![字体大文件](@assets/nuxt-best-practices/image-7.png)
+![字体大文件](@assets/nuxt3-optimization/image-7.png)
 
 `woff2` 是更适合用在网页上的字体格式，全称是 `Web Open Font Format`，它由 Mozilla、微软和 Opera 共同推出，它比一般的 TTF 格式具有更高的压缩率，更小的体积，加载速度更快，并且现代主流浏览器都已经支持。
 
-![现代浏览器都已支持 WOFF2](@assets/nuxt-best-practices/image-8.png)
+![现代浏览器都已支持 WOFF2](@assets/nuxt3-optimization/image-8.png)
 
 网站使用的 `Nunito` 字体刚好在 [Fontsource](https://fontsource.org/) 上提供了可变字体版本，直接安装使用即可。
 
