@@ -1,9 +1,379 @@
 ---
-title: 浅谈 Nuxt3 框架的构建优化与 Coding 最佳实践
-date: 2023-11-06 17:45:00 +08:00
+title: 一次 Nuxt3 框架的整体优化实践
+date: 2023-11-09 17:45:00 +08:00
 tags: [Nuxt, Vue, Frontend]
-description: 最近在关注基于 Nuxt3 框架搭建的前端
-draft: true
+description: 最近在关注基于 Nuxt3 框架搭建的前端项目优化，包括构建优化、性能优化、Coding 实践技巧等等。
 ---
 
-最近在关注基于 `Nuxt3` 搭建的前端系统一系列用户体验问题，主要是性能问题，这是 `PageSpeed`
+# 目录
+
+#
+
+最近在关注基于 `Nuxt3` 搭建的前端项目出现的一系列用户体验问题，主要是性能问题，这是 [PageSpeed](https://pagespeed.web.dev) 给出的体检报告
+
+移动端：
+
+![PageSpeed Report on Mobile](@assets/nuxt-best-practices/image.png)
+
+PC 端：
+
+![PageSpeed Report on PC](@assets/nuxt-best-practices/image-1.png)
+
+不管是移动端和 PC 端都有很大提升空间，`PageSpeed` 很贴心的给出了优化建议，下面就一项一项进行优化。
+
+# 提升首次内容绘制（FCP）速度
+
+## 通过构建分析精简 js bundle
+
+首当其冲的任务就是减小页面显示的大体积 js 文件。现代网站的 js 脚本往往比 html 更重，当浏览器加载 html 时遇到 `<script>` 标签，就不能再继续构建 DOM，而是要等待脚本下载完成并执行结束，才能继续处理其余的内容。
+
+PageSpeed 报告显示有一个 660 Kb 左右（gzip压缩后）比较大的 `entry.js`
+
+![比较大的 entry.js 文件](@assets/nuxt-best-practices/image-2.png)
+
+`Nuxt3` 自带了构建分析工具，通过下面的配置打开
+
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  build: {
+    analyze: {
+      filename: "stats.html",
+    },
+  },
+});
+```
+
+执行 `build` 任务后，会在项目根目录生成一个 `stats.html` 文件，它就是构建分析结果，打开它
+
+![优化前的构建分析报告](@assets/nuxt-best-practices/image-3.png)
+
+可以看到最明显的是 `virtual:svg-icons-register` 占据了 `entry.js` 的半壁江山，它是 [vite-plugin-svg-icons](https://www.npmjs.com/package/vite-plugin-svg-icons) 这个插件注入的，由于项目在 plugin 中引入了这个包，这个包直接将 svg 文件导入到 js 中，而且 plugin 最终会打包进 entry.js 这个文件，所以变成了这个结果。
+
+直接去掉这个包，替换为 [svg-sprite](https://nuxt.com/modules/svg-sprite) 即可解决。
+
+另一个大头是 `katex` 包，为什么访问首页会用到它呢？因为网站有全局弹窗和 AI 助手聊天内容，会使用 Markdown 渲染。在不改动业务逻辑的情况下，经过代码分析发现所有的 Markdown 渲染已经使用了 `md-editor-v3` 这个包，单独引入的 `katex` 其实是老代码迁移时的遗留问题，是作为 `marked` 拓展引入的，其实已经用不到了。故删之。
+
+另外，由于 client plugin 最终都会打包进 entry.js 这个文件，所以把没有必要的包移动到 `utils` 或者 `composables` 即可，让 `Nuxt` 按需加载。
+
+优化前，`build` 命令显示 entry.js 的大小是
+
+```
+ℹ .nuxt/dist/client/_nuxt/entry.a008c270.js   1,911.96 kB │ gzip: 587.19 kB
+```
+
+完成优化后它的大小直接减小到了原来的 1/6，使用 gzip 压缩后的体积也减到了原来的 1/3
+
+```
+ℹ .nuxt/dist/client/_nuxt/entry.a979eb91.js   349.59 kB │ gzip: 119.66 kB
+```
+
+## 延迟加载不必要的 js 脚本
+
+PageSpeed 显示，`gtag`、`gtm` 等运营分析相关的 js 脚本阻塞的网页加载
+
+![无关 js 阻塞了网页加载](@assets/nuxt-best-practices/image-4.png)
+
+对于这样的 js 脚本，可以在 `<script>` 标签中添加 `defer` 和 `async` 属性来告诉浏览器不要等待脚本。
+
+```html
+<script async defer src="https://xxxx"></script>
+```
+
+因为我的项目使用的是 `vue-gtag`、`vue-gtm` 和 `vue3-google-login` 这些封装好的包，所以直接修改插件配置即可。
+
+## 使用 gzip 压缩传输
+
+`Nuxt3` 目前还没有实现自动的压缩传输，可以从 [这个 Issue](https://github.com/unjs/nitro/issues/1007) 跟踪开发进度。
+
+现在大部分 CDN 都已经支持开启 `gzip` 压缩选项，比如阿里云：
+
+![阿里云 CDN 的压缩选项](@assets/nuxt-best-practices/image-5.png)
+
+使用 `Nginx` 也可以轻松开启 `gzip` 压缩
+
+```ini
+http {
+    gzip on;
+    gzip_disable "msie6";
+
+    # ...
+}
+```
+
+## 配置 CDN
+
+现在在云服务商配置一个 CDN 已经是非常常见且简单的操作了，需要注意的只有国内使用 CDN 一般需要备案，另外可以配置合理的缓存配置，并开启 `HTTP 2.0` 以进一步优化。
+
+![HTTP 2.0 配置](@assets/nuxt-best-practices/image-6.png)
+
+# 静态资源优化
+
+## 配置合理的 Cache
+
+PageSpeed 建议将 `js` `css` 和图片等静态资源设置 1 年的长缓存（虽然感觉对用户的硬盘不太友好。。）
+
+使用 `Nginx` 可以这样配置：
+
+```ini
+server {
+    location / {
+        # 设置静态资源缓存
+        if ($request_filename ~* .*\.(?:js|css)$) {
+            add_header 'Cache-Control' 'max-age=31536000';
+        }
+        if ($request_filename ~* .*\.(?:webp|jpg|jpeg|gif|png|ico|svg|mp4|woff2)$) {
+            add_header 'Cache-Control' 'max-age=31536000';
+        }
+        # 不缓存 html 和 json
+        if ($request_filename ~* .*\.(htm|html|json)$) {
+            add_header 'Cache-Control' 'no-store';
+        }
+    }
+}
+```
+
+## 字体大文件优化
+
+网站使用的字体是 `ttf` 格式，各种字形加起来大约有 240 Kb，不算很大但仍有优化的空间
+
+![字体大文件](@assets/nuxt-best-practices/image-7.png)
+
+`woff2` 是更适合用在网页上的字体格式，全称是 `Web Open Font Format`，它由 Mozilla、微软和 Opera 共同推出，它比一般的 TTF 格式具有更高的压缩率，更小的体积，加载速度更快，并且现代主流浏览器都已经支持。
+
+![现代浏览器都已支持 WOFF2](@assets/nuxt-best-practices/image-8.png)
+
+网站使用的 `Nunito` 字体刚好在 [Fontsource](https://fontsource.org/) 上提供了可变字体版本，直接安装使用即可。
+
+可变字体（Variable Font）是由字体设计师精心设计的一套字体轮廓及控制点位移参数，以达到自由变换字体的字重、字宽、笔画形状等，这样就可以用 CSS 控制字体的显示效果，而无需加载额外的字体文件。你可以在 [v-fonts](https://v-fonts.com/) 这里直观地看到效果。
+
+# SEO 优化
+
+## 使用 useSeoMeta
+
+`Nuxt3` 可以很方便的做 SEO 优化，使用 `useSeoMeta` composable 就可以在 SSR 时写入网页信息。
+
+```vue
+<script setup lang="ts">
+useSeoMeta({
+  title: "My Amazing Site",
+  ogTitle: "My Amazing Site",
+  description: "This is my amazing site, let me tell you all about it.",
+  ogDescription: "This is my amazing site, let me tell you all about it.",
+  ogImage: "https://example.com/image.png",
+  twitterCard: "summary_large_image",
+});
+</script>
+```
+
+如果想要设置的字段没有在这个函数中定义，也可以使用 `useHead` 或者 `Meta` 组件
+
+```vue
+<template>
+  <Meta name="twitter:image" :content="cover" />
+</template>
+```
+
+## 配置 robots.txt
+
+最简单的方法是在 `/public` 目录下放一个 `robots.txt` 文件，例如
+
+```
+User-agent: Googlebot
+Disallow: /nogooglebot/
+
+User-agent: *
+Allow: /
+```
+
+也可以使用 `@nuxtjs/robots` 包，动态生成 `robots.txt` 文件
+
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ["@nuxtjs/robots"],
+  robots: {
+    rules: [
+      { UserAgent: "*", Disallow: ["/nogooglebot/"] },
+      { UserAgent: "*", Allow: ["/"] },
+      { Sitemap: req => `https://${req.headers.host}/sitemap.xml` },
+    ],
+  },
+});
+```
+
+我的网站分为线上和测试环境，想要在不同环境下使用不同的爬虫规则用这两种方法都做不到，最后决定在 Nginx 中直接配置 `robots.txt` 文件
+
+```ini
+server {
+  location = /robots.txt {
+    root /etc/nginx/pages;  # 实际目录
+  }
+}
+```
+
+# Coding 风格和习惯问题
+
+## 使用 nuxt module 代替分散的配置
+
+例如我的网站使用了 `md-editor-v3` 这个包，正常使用它需要修改以下几个地方
+
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  css: ["md-editor-v3/lib/style.css"],
+});
+```
+
+```ts
+// plugins/md-editor.client.ts
+import { config } from "md-editor-v3";
+
+export default defineNuxtPlugin(async () => {
+  config({
+    editorConfig: {
+      renderDelay: 300,
+    },
+    markdownItConfig: md => {
+      md.set({
+        html: true,
+        linkify: true,
+      });
+    },
+  });
+});
+```
+
+```vue
+<!-- my-component.vue -->
+<script setup lang="ts">
+import MdEditor from "md-editor-v3";
+</script>
+
+<template>
+  <MdEditor />
+</template>
+```
+
+这种分散的定义不利于维护，很容易出现某个地方有点问题，但是怎么都找不到原因的情况。而且后期如果想替换这个库也很麻烦，那时的开发人员可能已经不记得这个库是如何引入的了。
+
+使用 `Nuxt3 Module` 可以将依赖打包到一起，例如
+
+```ts
+// modules/md-editor/index.ts
+import {
+  defineNuxtModule,
+  addComponent,
+  addPlugin,
+  createResolver,
+} from "@nuxt/kit";
+
+export default defineNuxtModule({
+  setup(options, nuxt) {
+    const { resolve } = createResolver(import.meta.url);
+
+    // 注入 css
+    nuxt.options.css.unshift("md-editor-v3/lib/style.css");
+
+    // 注入 vue 组件
+    ["MdEditor", "MdPreview", "MdCatalog"].forEach(comp => {
+      addComponent({
+        name: comp,
+        export: comp,
+        filePath: "md-editor-v3",
+      });
+    });
+
+    // 注入插件
+    addPlugin({
+      mode: "client",
+      src: resolve("./runtime/plugin"),
+    });
+  },
+});
+```
+
+```ts
+// modules/md-editor/runtime/plugin.ts
+import { config } from "md-editor-v3";
+
+export default defineNuxtPlugin(async () => {
+  config({
+    editorConfig: {
+      renderDelay: 300,
+    },
+    markdownItConfig: md => {
+      md.set({
+        html: true,
+        linkify: true,
+      });
+    },
+  });
+});
+```
+
+放在 `/modules` 目录下的模块会自动加载，在模块中直接引入 vue 组件后，auto import 功能会自动生效
+
+```vue
+<template>
+  <!-- 不需要 import 就可以使用 -->
+  <MdEditor />
+</template>
+```
+
+## 区分 composables、utils 和 plugins
+
+很多新手无法区分一个业务函数或者一个三方包应该放到 composables、utils 还是 plugins 里，经常会根据直觉把代码乱放，造成混乱。
+
+`Composables` 类似 React 中的 Hooks，常见的有 `useState`、`useFetch` 等，它用来封装 **有状态** 的逻辑函数。
+
+有状态函数会随着函数输入以外的条件变化，比如时间。可以这样实现一个 `useNow`：
+
+```ts
+export const useNow = () => {
+  const now = ref(new Date());
+  onMounted(() => {
+    window.requestAnimationFrame(() => (now.value = new Date()));
+  });
+  return now;
+};
+```
+
+无状态函数指的是，函数返回值只与函数输入有关，对于同一个输入，函数的返回值永远是相同的。例如 `lodash.isEmpty()`，传入空对象时它永远返回 true。这样的函数应该放到 `utils` 中。
+
+对于一些开箱即用的三方包，比如 `dayjs`，也可以放到 `utils` 中直接 export。
+
+另外一些 Vue plugins 形式的三方包，因为需要注入到 Vue App 中，所以需要定义在 `/plugins` 目录下。注意根据使用场景，添加 `.server` 或者 `.client` 后缀。
+
+## 业务类型定义的存放位置
+
+有些前端项目会在 `/types` 目录下写各种 `.d.ts` 文件来定义业务逻辑的 interface 类型，甚至全部定义在 global 模块下，这样就可以全局使用了。
+
+但是在 Nuxt3 里不建议这么做。所有的 interface、enum 定义都应该放到 `.ts` 文件中并 export，这是因为 Nuxt3 支持自动导入，而它不会扫描 `.d.ts` 文件，`.d.ts` 文件也无法定义枚举。
+
+例如，对于 api 的输入输出类型定义，可以放到 `/api` 目录下，和接口定义放到一起，并将 `/api` 目录添加到自动导入目录。
+
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  imports: {
+    global: true,
+    dirs: ["api/*"],
+  },
+});
+```
+
+## 添加 Typescript 检查
+
+`Typescript` 无疑增强了程序的健壮性，大部分低端问题都可以被 ts 的静态类型检查发现，但它并不是强制的，即使 ts 报错程序还是会一样运行。
+
+在 Nuxt3 中启用 Typescript 检查，就可以在代码发生变更时，全局扫描 ts 错误并输出到控制台
+
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  typescript: {
+    typeCheck: true,
+  },
+});
+```

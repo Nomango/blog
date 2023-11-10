@@ -24,6 +24,7 @@ export default defineConfig({
         remarkToc as any,
         {
           maxDepth: 2,
+          skip: "^$",
           heading: "(table[ -]of[ -])?contents?|toc|目录",
         },
       ],
