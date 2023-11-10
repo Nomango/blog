@@ -26,6 +26,9 @@ dependencies:
   astro:
     specifier: ^3.1.3
     version: 3.3.2(@types/node@20.4.7)(typescript@5.2.2)
+  dateformat:
+    specifier: ^5.0.3
+    version: 5.0.3
   fuse.js:
     specifier: ^6.6.2
     version: 6.6.2
@@ -70,6 +73,9 @@ devDependencies:
   '@tailwindcss/typography':
     specifier: ^0.5.10
     version: 0.5.10(tailwindcss@3.3.3)
+  '@types/dateformat':
+    specifier: ^5.0.2
+    version: 5.0.2
   '@types/github-slugger':
     specifier: ^1.3.0
     version: 1.3.0
@@ -1516,6 +1522,10 @@ packages:
     dependencies:
       '@babel/types': 7.22.19
 
+  /@types/dateformat@5.0.2:
+    resolution: {integrity: sha512-M95hNBMa/hnwErH+a+VOD/sYgTmo15OTYTM2Hr52/e0OdOuY+Crag+kd3/ioZrhg0WGbl9Sm3hR7UU+MH6rfOw==}
+    dev: true
+
   /@types/debug@4.1.8:
     resolution: {integrity: sha512-/vPO1EPOs306Cvhwv7KfVfYvOJqA/S/AXjaHQiJboCZzcNDb+TIJFN9/2C9DZ//ijSKWioNyUxD792QmDJ+HKQ==}
     dependencies:
@@ -2621,6 +2631,11 @@ packages:
   /date-fns@2.16.1:
     resolution: {integrity: sha512-sAJVKx/FqrLYHAQeN7VpJrPhagZc9R4ImZIWYRFZaaohR3KzmuK88touwsSwSVT8Qcbd4zoDsnGfX4GFB4imyQ==}
     engines: {node: '>=0.11'}
+    dev: false
+
+  /dateformat@5.0.3:
+    resolution: {integrity: sha512-Kvr6HmPXUMerlLcLF+Pwq3K7apHpYmGDVqrxcDasBg86UcKeTSNWbEzU8bwdXnxnR44FtMhJAxI4Bov6Y/KUfA==}
+    engines: {node: '>=12.20'}
     dev: false
 
   /debug@2.6.9:
