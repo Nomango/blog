@@ -11,13 +11,9 @@ description: 最近在关注基于 Nuxt3 框架搭建的前端项目优化，包
 
 最近在关注基于 `Nuxt3` 搭建的前端项目出现的一系列用户体验问题，主要是性能问题，这是 [PageSpeed](https://pagespeed.web.dev) 给出的体检报告
 
-移动端：
-
-![PageSpeed Report on Mobile](@assets/nuxt3-optimization/image.png)
-
-PC 端：
-
-![PageSpeed Report on PC](@assets/nuxt3-optimization/image-1.png)
+|                               移动端                                |                               PC 端                               |
+| :-----------------------------------------------------------------: | :---------------------------------------------------------------: |
+| ![PageSpeed Report on Mobile](@assets/nuxt3-optimization/image.png) | ![PageSpeed Report on PC](@assets/nuxt3-optimization/image-1.png) |
 
 不管是移动端和 PC 端都有很大提升空间，`PageSpeed` 很贴心的给出了优化建议，下面就一项一项进行优化。
 
@@ -380,9 +376,9 @@ export default defineNuxtConfig({
 
 # 优化前后对比
 
-|        |                       Before                       |                       After                        |
-| :----- | :------------------------------------------------: | :------------------------------------------------: |
-| PC 端  | ![优化前](@assets/nuxt3-optimization/image-9.png)  | ![优化后](@assets/nuxt3-optimization/image-10.png) |
-| 移动端 | ![优化前](@assets/nuxt3-optimization/image-11.png) | ![优化后](@assets/nuxt3-optimization/image-12.png) |
+|                          Before                           |                           After                           |
+| :-------------------------------------------------------: | :-------------------------------------------------------: |
+|  ![优化前](@assets/nuxt3-optimization/image-9.png) PC端   |  ![优化后](@assets/nuxt3-optimization/image-10.png) PC端  |
+| ![优化前](@assets/nuxt3-optimization/image-11.png) 移动端 | ![优化后](@assets/nuxt3-optimization/image-12.png) 移动端 |
 
 可以看到，PC 端性能指标提升了大约 10 倍，移动端性能指标提升了大约 3 倍。

@@ -122,6 +122,10 @@
   pre > code {
     @apply !m-0 whitespace-pre;
   }
+
+  table img {
+    @apply !my-1
+  }
 }
 
 @layer components {
