@@ -7,7 +7,6 @@ import Comment from "@components/comment/index.astro";
 import Datetime from "@components/Datetime";
 import slugify from "@utils/slugify";
 import type { Post } from "@utils/getPosts";
-import MediumZoom from "@components/MediumZoom.astro";
 
 export interface Props {
   post: Post;
@@ -42,12 +41,11 @@ const ogUrl = new URL(
   canonicalURL={canonicalURL}
 >
   <Header />
-  <MediumZoom target="main img" />
 
   <div class="mx-auto flex w-full max-w-3xl justify-start px-2">
     <button
       class="focus-outline mb-2 mt-8 flex hover:opacity-75"
-      onclick="history.length ? history.back() : history.pushState('/posts')"
+      onclick="history.length > 1 ? history.back() : location.href = '/posts'"
     >
       <svg xmlns="http://www.w3.org/2000/svg"
         ><path
@@ -70,7 +68,13 @@ const ogUrl = new URL(
     </div>
 
     <article id="article" role="article" class="prose mx-auto mt-8 max-w-3xl">
-      { description && <blockquote><p>{description}</p></blockquote>}
+      {
+        description && (
+          <blockquote>
+            <p>{description}</p>
+          </blockquote>
+        )
+      }
       <Content />
     </article>
 
@@ -78,6 +82,13 @@ const ogUrl = new URL(
   </main>
   <Footer />
 </Layout>
+
+<script>
+  import zoom from "@utils/mediumZoom";
+
+  // listen to astro:page-load event to handle the first loading
+  document.addEventListener("astro:page-load", () => zoom.attach("main img"));
+</script>
 
 <style>
   main {
