@@ -1,13 +1,49 @@
 ---
 title: OpenAI Assistant API 在生产环境使用的一些阻力
-date: 2023-11-13 19:20:00
+date: 2023-11-19 19:20:00
 tags: [OpenAI, GPT]
 description: 聊聊在生产环境使用 Assistant API 可能会遇到的一些问题
-draft: true
 ---
 
 # 目录
 
 #
 
-[link](https://community.openai.com/t/assistants-api-pricing-and-token-usage/475526)
+使用 OpenAI Assistant API 有段时间了，发现这个 Beta 版本的 API 想用到产品上还有很多问题需要解决。
+
+# 计费不明确
+
+Assistant API 提供的 `Thread` 可以帮我们管理对话上下文，让 GPT 知道我们之前和它说过什么。一开始以为只有新发送的对话会产生费用，结果是天真了，历史对话越长费用越高，每次检索文档也会导致更多的消耗，于是 [OpenAI 的论坛](https://community.openai.com/t/assistants-api-pricing-and-token-usage/475526)上有很多人抱怨。
+
+总结起来它的计费主要有这么几个问题：
+
+1. 无法控制每次对话的 token 上限或费用上限，导致每次对话**费用不可控**
+2. 每次对话都会将上下文（历史聊天记录和文件检索等）全部重新计费
+3. 文档中没有写明费用产生的时机（例如添加 message 会计费吗？上传助手文件会计费吗？）
+4. 费用不透明，API 并没有返回 input/output 产生的 token 消耗
+5. Code Interpreter 和 Function Call 不受控制的调用，一次对话可能调用多次
+
+![用户抱怨费用问题](@assets/openai-assistant-problems/image.png)
+
+# GPT 按心情调用功能
+
+不管是文件检索、Code Interpreter 还是 Function Call，用户都没有办法强制 GPT 使用具体的功能。
+
+比如提供一个 Linux 手册给 GPT，用户在问 Linux 相关的问题时 GPT 不一定会查这个手册，查或不查完全取决于 GPT 的 “心情”，就像[这篇帖子](https://community.openai.com/t/how-to-force-assistant-to-use-file-information/516265/2)中很多人的反馈一样。
+
+![无法控制 GPT 想用什么功能](@assets/openai-assistant-problems/image-1.png)
+
+# 服务不稳定
+
+我最近遇到的一些奇葩 BUG 有：
+
+- 文件检索时，有很大概率提示 “我没有权限阅读文件”
+
+![你没权限谁有权限？](@assets/openai-assistant-problems/image-2.png)
+
+- 上传文件太小时，接口直接报错 400 而且没有报错提示，后来多试几次才发现多打点字就正常了
+- 太慢了，一次请求 10s 返回都很不错了，经常是 10s 以上，这怎么做产品？
+
+---
+
+现在的 API 还是 Beta 版本，离正式发布应该不久了，不知道正式版是不是能解决这些问题。（不过 Altman 这次的风波会不会影响 OpenAI 的开发进度呢？）
