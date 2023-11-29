@@ -1,0 +1,61 @@
+---
+export interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<script
+  src="https://giscus.app/client.js"
+  data-repo="Nomango/blog"
+  data-repo-id="MDEwOlJlcG9zaXRvcnkyOTEwMjQ2NDY="
+  data-category="Announcements"
+  data-category-id="DIC_kwDOEVivBs4CbWgm"
+  data-mapping="specific"
+  data-term={`[${slug}]`}
+  data-strict="0"
+  data-reactions-enabled="1"
+  data-emit-metadata="0"
+  data-input-position="top"
+  data-theme="light_protanopia"
+  data-lang="en"
+  crossorigin="anonymous"
+  async></script>
+
+<script>
+  function changeGiscusTheme(theme: "dark" | "light") {
+    const iframe = document.querySelector(
+      "iframe.giscus-frame"
+    ) as HTMLIFrameElement;
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: theme === "dark" ? "dark_protanopia" : "light_protanopia",
+          },
+        },
+      };
+      iframe.contentWindow?.postMessage(message, "https://giscus.app");
+    }
+  }
+
+  window.addEventListener("message", (e: any) => {
+    if (e.origin !== "https://giscus.app") return;
+    if (e.data && e.data.giscus && e.data.giscus.resizeHeight) {
+      // reset theme
+      changeGiscusTheme(
+        document.firstElementChild?.getAttribute("data-theme") === "dark"
+          ? "dark"
+          : "light"
+      );
+    }
+  });
+
+  document.addEventListener(
+    "themechange",
+    (e: CustomEvent<"light" | "dark">) => {
+      changeGiscusTheme(e.detail);
+    }
+  );
+</script>

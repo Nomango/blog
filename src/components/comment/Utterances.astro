@@ -16,14 +16,14 @@ const { slug } = Astro.props;
   async></script>
 
 <script>
-  function changeUtterancesTheme(theme: "github-dark" | "github-light") {
+  function changeUtterancesTheme(theme: "dark" | "light") {
     const iframe = document.querySelector(
-      ".utterances-frame"
+      "iframe.utterances-frame"
     ) as HTMLIFrameElement;
     if (iframe) {
       const message = {
         type: "set-theme",
-        theme: theme,
+        theme: theme === "dark" ? "github-dark" : "github-light",
       };
       iframe.contentWindow?.postMessage(message, "https://utteranc.es");
     }
@@ -35,8 +35,8 @@ const { slug } = Astro.props;
       // reset theme
       changeUtterancesTheme(
         document.firstElementChild?.getAttribute("data-theme") === "dark"
-          ? "github-dark"
-          : "github-light"
+          ? "dark"
+          : "light"
       );
     }
   });
@@ -44,9 +44,7 @@ const { slug } = Astro.props;
   document.addEventListener(
     "themechange",
     (e: CustomEvent<"light" | "dark">) => {
-      changeUtterancesTheme(
-        e.detail === "dark" ? "github-dark" : "github-light"
-      );
+      changeUtterancesTheme(e.detail);
     }
   );
 </script>
