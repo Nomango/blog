@@ -18,15 +18,19 @@ function color(s: string) {
 }
 ---
 
-<object
-  class="badge-icon"
-  data={`https://img.shields.io/badge/${encodeURIComponent(
-    label ?? logo ?? ""
-  )}-${color(bgColor)}?style=for-the-badge${
-    queryParam("logo", logo) +
-    queryParam("logoColor", color(logoColor)) +
-    queryParam("link", link)
-  }`}></object>
+<a href={link} target="_blank">
+  <img
+    class="badge-icon"
+    src={`https://img.shields.io/badge/${encodeURIComponent(
+      label ?? logo ?? ""
+    )}-${color(bgColor)}?style=for-the-badge${
+      queryParam("logo", logo) +
+      queryParam("logoColor", color(logoColor)) +
+      queryParam("link", link)
+    }`}
+    alt={logo}
+  />
+</a>
 
 <style>
   .badge-icon {
