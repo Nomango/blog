@@ -54,7 +54,7 @@ const ogUrl = new URL(
       </svg><span>Go back</span>
     </button>
   </div>
-  <main id="main-content">
+  <main id="main-content" class="post-detail">
     <h1 class="post-title" transition:name={`post-${slugify(post)}`}>
       {title}
     </h1>
@@ -87,7 +87,7 @@ const ogUrl = new URL(
   import zoom from "@utils/mediumZoom";
 
   // listen to astro:page-load event to handle the first loading
-  document.addEventListener("astro:page-load", () => zoom.attach("main img"));
+  document.addEventListener("astro:page-load", () => zoom.attach("main.post-detail img"));
 </script>
 
 <style>
