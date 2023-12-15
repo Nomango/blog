@@ -8,6 +8,7 @@ import Card from "@components/Card";
 import Socials from "@components/Socials.astro";
 import { SOCIALS } from "@config";
 import getPosts, { getSortedPosts } from "@utils/getPosts";
+import Backquote from "@components/Backquote.astro";
 
 const posts = await getPosts();
 
@@ -21,9 +22,17 @@ const socialCount = SOCIALS.filter(social => social.active).length;
   <Header />
   <main id="main-content">
     <section id="hero">
-      <h1 class="!mb-0">值得去的地方都没有捷径。</h1>
+      <Backquote size={4}>
+        <h3 class="!my-0 sm:text-center">
+          请你务必一而再，再而三，三而不竭，千次万次，
+          <br class="hidden sm:block" />
+           毫不犹豫地救自己于人间水火之中。
+        </h3>
+      </Backquote>
 
-      <p>The places worth going to are devoid of shortcuts.</p>
+      <!-- <h1 class="!mb-0">值得去的地方都没有捷径。</h1>
+      <p>The places worth going to are devoid of shortcuts.</p> -->
+
       <!-- <p>
         Read the blog posts or check
         <LinkButton
@@ -33,7 +42,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
           README
         </LinkButton> for more info.
       </p> -->
-      {
+      <!-- {
         // only display if at least one social link is enabled
         socialCount > 0 && (
           <div class="social-wrapper">
@@ -41,7 +50,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
             <Socials />
           </div>
         )
-      }
+      } -->
     </section>
 
     <Hr />
@@ -96,7 +105,13 @@ const socialCount = SOCIALS.filter(social => social.active).length;
     @apply pb-6 pt-8;
   }
   #hero h1 {
-    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-4xl;
+    @apply my-4 text-3xl font-bold sm:my-8 sm:text-4xl;
+  }
+  #hero h2 {
+    @apply my-4 text-2xl font-bold sm:my-8 sm:text-3xl;
+  }
+  #hero h3 {
+    @apply my-4 text-xl font-bold sm:my-8 sm:text-2xl;
   }
   #hero p {
     @apply my-2;
