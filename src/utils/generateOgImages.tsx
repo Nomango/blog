@@ -1,45 +1,65 @@
-import satori, { type SatoriOptions } from "satori";
+import satori, { type SatoriOptions, type Font } from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import postOgImage from "./og-templates/post";
 import siteOgImage from "./og-templates/site";
 import type { Post } from "./getPosts";
 
-const fetchFonts = async () => {
-  // Regular Font
-  const fontFileRegular = await fetch(
-    "https://www.1001fonts.com/download/font/ibm-plex-mono.regular.ttf"
-  );
-  const fontRegular: ArrayBuffer = await fontFileRegular.arrayBuffer();
+const fetchFonts = async (): Promise<Font[]> => {
+  const fetchFont = async (
+    url: string,
+    font: Omit<Font, "data">
+  ): Promise<Font> => {
+    const fontFile = await fetch(url);
+    const data: ArrayBuffer = await fontFile.arrayBuffer();
+    return {
+      ...font,
+      data: data,
+    };
+  };
 
-  // Bold Font
-  const fontFileBold = await fetch(
-    "https://www.1001fonts.com/download/font/ibm-plex-mono.bold.ttf"
-  );
-  const fontBold: ArrayBuffer = await fontFileBold.arrayBuffer();
-
-  return { fontRegular, fontBold };
+  return Promise.all([
+    fetchFont(
+      "https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-mono@latest/latin-400-normal.ttf",
+      {
+        name: "IBM Plex Mono",
+        weight: 400,
+        style: "normal",
+      }
+    ),
+    fetchFont(
+      "https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-mono@latest/latin-600-normal.ttf",
+      {
+        name: "IBM Plex Mono",
+        weight: 600,
+        style: "normal",
+      }
+    ),
+    fetchFont(
+      "https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-sc@latest/chinese-simplified-400-normal.woff",
+      {
+        name: "Noto Sans SC",
+        weight: 400,
+        style: "normal",
+      }
+    ),
+    fetchFont(
+      "https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-sc@latest/chinese-simplified-600-normal.woff",
+      {
+        name: "Noto Sans SC",
+        weight: 600,
+        style: "normal",
+      }
+    ),
+  ]);
 };
 
-const { fontRegular, fontBold } = await fetchFonts();
+const fonts = await fetchFonts();
 
 const options: SatoriOptions = {
   width: 1200,
   height: 630,
   embedFont: true,
-  fonts: [
-    {
-      name: "IBM Plex Mono",
-      data: fontRegular,
-      weight: 400,
-      style: "normal",
-    },
-    {
-      name: "IBM Plex Mono",
-      data: fontBold,
-      weight: 600,
-      style: "normal",
-    },
-  ],
+  fonts,
 };
 
 function svgBufferToPngBuffer(svg: string) {
