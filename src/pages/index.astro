@@ -23,15 +23,11 @@ const socialCount = SOCIALS.filter(social => social.active).length;
   <main id="main-content">
     <section id="hero">
       <Backquote size={4}>
-        <h3 class="!my-0 sm:text-center">
-          请你务必一而再，再而三，三而不竭，千次万次，
-          <br class="hidden sm:block" />
-           毫不犹豫地救自己于人间水火之中。
-        </h3>
+        <h3 class="!my-0 text-center">值得去的地方都没有捷径。</h3>
+        <p class="text-center">
+          The places worth going to are devoid of shortcuts.
+        </p>
       </Backquote>
-
-      <!-- <h1 class="!mb-0">值得去的地方都没有捷径。</h1>
-      <p>The places worth going to are devoid of shortcuts.</p> -->
 
       <!-- <p>
         Read the blog posts or check
@@ -114,7 +110,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
     @apply my-4 text-xl font-bold sm:my-8 sm:text-2xl;
   }
   #hero p {
-    @apply my-2;
+    @apply my-2 text-sm sm:text-base;
   }
   .social-wrapper {
     @apply mt-4 flex flex-col sm:flex-row sm:items-center;
