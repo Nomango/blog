@@ -18,9 +18,8 @@ function color(s: string) {
 }
 ---
 
-<a href={link} target="_blank">
+<a class="badge-icon" href={link} target="_blank">
   <img
-    class="badge-icon"
     src={`https://img.shields.io/badge/${encodeURIComponent(
       label ?? logo ?? ""
     )}-${color(bgColor)}?style=for-the-badge${
@@ -34,6 +33,9 @@ function color(s: string) {
 
 <style>
   .badge-icon {
+    @apply !no-underline;
+  }
+  .badge-icon img {
     @apply !mx-0 !my-1 inline-block;
   }
 </style>
