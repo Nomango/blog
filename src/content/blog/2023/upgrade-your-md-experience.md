@@ -184,14 +184,12 @@ export default defineConfig({
 
 # 按钮
 
-示例：
-
-::btn[跳到标题]{href="#按钮"}
+示例：:btn[跳到标题]{href="#按钮"}
 
 代码：
 
 ```markdown
-::btn[跳到标题]{href="#按钮"}
+:btn[跳到标题]{href="#按钮"}
 ```
 
 一个样式稍微复杂的按钮：
