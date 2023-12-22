@@ -25,9 +25,7 @@ const { slug } = Astro.props;
 
 <script>
   function changeGiscusTheme(theme: "dark" | "light") {
-    const iframe = document.querySelector(
-      "iframe.giscus-frame"
-    ) as HTMLIFrameElement;
+    const iframe = document.querySelector("iframe.giscus-frame") as HTMLIFrameElement;
     if (iframe) {
       const message = {
         giscus: {
@@ -44,18 +42,11 @@ const { slug } = Astro.props;
     if (e.origin !== "https://giscus.app") return;
     if (e.data && e.data.giscus && e.data.giscus.resizeHeight) {
       // reset theme
-      changeGiscusTheme(
-        document.firstElementChild?.getAttribute("data-theme") === "dark"
-          ? "dark"
-          : "light"
-      );
+      changeGiscusTheme(document.firstElementChild?.getAttribute("data-theme") === "dark" ? "dark" : "light");
     }
   });
 
-  document.addEventListener(
-    "themechange",
-    (e: CustomEvent<"light" | "dark">) => {
-      changeGiscusTheme(e.detail);
-    }
-  );
+  document.addEventListener("themechange", (e: CustomEvent<"light" | "dark">) => {
+    changeGiscusTheme(e.detail);
+  });
 </script>

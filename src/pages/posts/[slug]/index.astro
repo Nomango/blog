@@ -46,10 +46,7 @@ const sortedPosts = getSortedPosts(posts);
 
 const totalPages = getPageNumbers(sortedPosts.length);
 
-const currentPage =
-  slug && !isNaN(Number(slug)) && totalPages.includes(Number(slug))
-    ? Number(slug)
-    : 0;
+const currentPage = slug && !isNaN(Number(slug)) && totalPages.includes(Number(slug)) ? Number(slug) : 0;
 const lastPost = currentPage * SITE.postPerPage;
 const startPost = lastPost - SITE.postPerPage;
 
@@ -60,10 +57,6 @@ const paginatedPosts = sortedPosts.slice(startPost, lastPost);
   post ? (
     <PostDetails post={post} />
   ) : (
-    <Posts
-      posts={paginatedPosts}
-      pageNum={currentPage}
-      totalPages={totalPages.length}
-    />
+    <Posts posts={paginatedPosts} pageNum={currentPage} totalPages={totalPages.length} />
   )
 }

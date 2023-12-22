@@ -8,8 +8,7 @@ const breadcrumbList = currentUrlPath.split("/").slice(1);
 
 // if breadcrumb is Home > Posts > 1 <etc>
 // replace Posts with Posts (page number)
-breadcrumbList[0] === "posts" &&
-  breadcrumbList.splice(0, 2, `Posts (page ${breadcrumbList[1] || 1})`);
+breadcrumbList[0] === "posts" && breadcrumbList.splice(0, 2, `Posts (page ${breadcrumbList[1] || 1})`);
 ---
 
 <nav class="breadcrumb" aria-label="breadcrumb">
@@ -22,10 +21,7 @@ breadcrumbList[0] === "posts" &&
       breadcrumbList.map((breadcrumb, index) =>
         index + 1 === breadcrumbList.length ? (
           <li>
-            <span
-              class={`${index > 0 ? "lowercase" : "capitalize"}`}
-              aria-current="page"
-            >
+            <span class={`${index > 0 ? "lowercase" : "capitalize"}`} aria-current="page">
               {/* make the last part lowercase in Home > Tags > some-tag */}
               {breadcrumb}
             </span>

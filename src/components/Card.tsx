@@ -21,11 +21,7 @@ export default function Card({ post, secHeading = true }: Props) {
         href={`/posts/${slugify(post)}`}
         className="inline-block text-lg font-medium text-skin-accent decoration-dashed underline-offset-4 focus-visible:no-underline focus-visible:underline-offset-0"
       >
-        {secHeading ? (
-          <h2 {...headerProps}>{title}</h2>
-        ) : (
-          <h3 {...headerProps}>{title}</h3>
-        )}
+        {secHeading ? <h2 {...headerProps}>{title}</h2> : <h3 {...headerProps}>{title}</h3>}
       </a>
       <Datetime datetime={pubDatetime} />
       <p className="my-1 opacity-80">{description}</p>

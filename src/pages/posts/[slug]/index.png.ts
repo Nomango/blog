@@ -4,9 +4,7 @@ import slugify from "@utils/slugify";
 import getPosts, { type Post } from "@utils/getPosts";
 
 export async function getStaticPaths() {
-  const posts = await getPosts().then(p =>
-    p.filter(({ data }) => !data.ogImage)
-  );
+  const posts = await getPosts().then(p => p.filter(({ data }) => !data.ogImage));
 
   return posts.map(post => ({
     params: { slug: slugify(post) },

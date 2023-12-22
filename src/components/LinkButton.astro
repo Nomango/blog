@@ -8,14 +8,7 @@ export interface Props {
   target?: HTMLAnchorElement["target"];
 }
 
-const {
-  href,
-  className,
-  ariaLabel,
-  title,
-  disabled = false,
-  target,
-} = Astro.props;
+const { href, className, ariaLabel, title, disabled = false, target } = Astro.props;
 ---
 
 <a

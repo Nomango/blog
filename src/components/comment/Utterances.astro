@@ -17,9 +17,7 @@ const { slug } = Astro.props;
 
 <script>
   function changeUtterancesTheme(theme: "dark" | "light") {
-    const iframe = document.querySelector(
-      "iframe.utterances-frame"
-    ) as HTMLIFrameElement;
+    const iframe = document.querySelector("iframe.utterances-frame") as HTMLIFrameElement;
     if (iframe) {
       const message = {
         type: "set-theme",
@@ -33,18 +31,11 @@ const { slug } = Astro.props;
     if (e.origin !== "https://utteranc.es") return;
     if (e.data && e.data.type === "resize") {
       // reset theme
-      changeUtterancesTheme(
-        document.firstElementChild?.getAttribute("data-theme") === "dark"
-          ? "dark"
-          : "light"
-      );
+      changeUtterancesTheme(document.firstElementChild?.getAttribute("data-theme") === "dark" ? "dark" : "light");
     }
   });
 
-  document.addEventListener(
-    "themechange",
-    (e: CustomEvent<"light" | "dark">) => {
-      changeUtterancesTheme(e.detail);
-    }
-  );
+  document.addEventListener("themechange", (e: CustomEvent<"light" | "dark">) => {
+    changeUtterancesTheme(e.detail);
+  });
 </script>

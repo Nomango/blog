@@ -6,11 +6,7 @@ export const slugifyStr = (str: string) => slugger(str);
 export const slugifyAll = (arr: string[]) => arr.map(str => slugifyStr(str));
 
 export const getPostSlugs = (post: Post) => {
-  return [
-    post.slug.slice(post.slug.lastIndexOf("/") + 1),
-    slugger(post.data.title),
-    ...(post.data.aliases || []),
-  ];
+  return [post.slug.slice(post.slug.lastIndexOf("/") + 1), slugger(post.data.title), ...(post.data.aliases || [])];
 };
 
 const slugify = (post: Post) => getPostSlugs(post)[0];
