@@ -55,7 +55,7 @@ json obj = {
 
 一个为 C++ 量身打造的轻量级 JSON 通用工具，轻松完成 JSON 解析和序列化功能，并和 C++ 输入输出流交互。
 
-::::btn{href="https://github.com/Nomango/jsonxx"}
+::::btn{href="https://github.com/Nomango/jsonxx" target="\_blank"}
 :i{.fab .fa-github .fa-fw .fa-lg} Nomango/jsonxx
 ::::
 

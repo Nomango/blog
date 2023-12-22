@@ -25,7 +25,7 @@ docker config create redis-config ./redis.conf
 
 创建后，Swarm 集群上的所有节点都可以访问到这个配置文件，下面将配置加入到 `compose` 中
 
-```yaml {5,6} {9,10}
+```yaml {5,6,9,10}
 services:
   redis:
     image: redis
@@ -71,7 +71,7 @@ echo "some secret content" | docker secret create my-secret -
 
 或者直接定义在 `compose` 文件中
 
-```yaml {4,5} {9,10} {15,16}
+```yaml {4,5,9,10,15,16}
 services:
   mysql:
     image: mysql

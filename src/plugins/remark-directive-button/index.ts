@@ -45,9 +45,8 @@ export default function remarkDirectiveButton() {
         "a",
         {
           class: "rounded bg-skin-card p-2 !text-skin-base no-underline hover:!text-skin-base",
-          target: "_blank",
           rel: "noopener",
-          href: attributes.href,
+          ...attributes,
         },
         node.children.reduce((children, child) => {
           if (child.type === "paragraph") {
