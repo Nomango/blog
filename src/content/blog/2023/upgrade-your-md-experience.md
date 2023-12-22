@@ -1,8 +1,8 @@
 ---
-title: 升级你的 Markdown 书写体验
+title: 升级你的 Markdown 博客书写体验
 date: 2023-12-22 19:06:00
 tags: [Markdown, Astro]
-description: 来看看现代化的 Markdown 文章书写方式吧
+description: 来看看现代化的 Markdown 文章书写技巧吧
 ---
 
 `Markdown` 用于日常书写已经非常流畅了，不过现在大部分语法支持是 2017 年由 Github 发布的 `GFM` （GitHub Flavored Markdown），已经不太能满足现代化博客的多样化需求。
@@ -77,6 +77,20 @@ export default defineConfig({
 ```
 ````
 
+还可以显示成 diff 样式
+
+```js ins={1} del={2}
+console.log("old codes");
+console.log("new codes");
+```
+
+````markdown
+```js ins={1} del={2}
+console.log("old codes");
+console.log("new codes");
+```
+````
+
 以及代码块中的块高亮功能
 
 ```js "defineConfig"
@@ -135,6 +149,12 @@ Markdown 最头疼的事之一就是图片管理，由于我的博客没有配�
 好在 VSCode 的 Markdown 插件已经内置了这个功能，我们只需要在 Settings 中搜索 `markdown copy files`，然后配置路径即可：
 
 ![Markdown Copy Files Setting](@assets/upgrade-your-md-experience/image.png)
+
+# 表格编辑
+
+推荐安装 VSCode 的 `Markdown Table` 插件，在编写表格时具有自动对齐、Tab 跳转下一格等功能，极大的提高表格编辑效率。
+
+![VSCode Markdown Table](@assets/upgrade-your-md-experience/image-1.png)
 
 # 更多
 
