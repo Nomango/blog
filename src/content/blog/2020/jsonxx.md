@@ -4,13 +4,7 @@ date: 2020-09-16 17:42:41
 tags: [Cpp]
 ---
 
-import Button from "@components/md/Button.astro";
-
-<Button
-  title="Copy of Article"
-  href="https://zhuanlan.zhihu.com/p/248209994"
-  icon="fa-zhihu fa-fw fa-xl"
-></Button>
+> 外部链接： [:i{.fab .fa-zhihu .fa-fw .fa-xl}](https://zhuanlan.zhihu.com/p/248209994)
 
 话不多说，先上 code！
 
@@ -61,11 +55,9 @@ json obj = {
 
 一个为 C++ 量身打造的轻量级 JSON 通用工具，轻松完成 JSON 解析和序列化功能，并和 C++ 输入输出流交互。
 
-<Button
-  title="Nomango/jsonxx"
-  href="https://github.com/Nomango/jsonxx"
-  icon="fa-github fa-fw fa-lg"
-></Button>
+::::btn{href="https://github.com/Nomango/jsonxx"}
+:i{.fab .fa-github .fa-fw .fa-lg} Nomango/jsonxx
+::::
 
 ### 使用介绍
 

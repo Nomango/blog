@@ -5,6 +5,8 @@ import remarkDirective from "remark-directive";
 import remarkAsides from "./src/plugins/remark-asides";
 import remarkDirectiveCollapse from "./src/plugins/remark-directive-collapse";
 import remarkDirectivToc from "./src/plugins/remark-directive-toc";
+import remarkDirectiveButton from "./src/plugins/remark-directive-button";
+import remarkDirectiveHTML from "./src/plugins/remark-directive-html";
 import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
 import astroExpressiveCode from "astro-expressive-code";
@@ -37,6 +39,8 @@ export default defineConfig({
         skip: "^$",
         label: "目录",
       }),
+      remarkDirectiveButton,
+      remarkDirectiveHTML,
     ],
     shikiConfig: {
       theme: "css-variables",
