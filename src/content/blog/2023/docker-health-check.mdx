@@ -5,8 +5,6 @@ tags: [Docker, Docker Swarm, DevOps]
 description: 学习在 Docker Swarm 中检查服务的健康状态，并处理服务异常。
 ---
 
-import Note from "@components/md/Note.astro";
-
 # 服务健康状态
 
 通过指定 `docker-compose` 文件中的 `services.healthcheck` 配置，可以对服务进行健康状态检查
@@ -25,30 +23,24 @@ healthcheck:
 
 ```yaml
 healthcheck:
-  test: [
-      "CMD-SHELL",
-      "curl -o /dev/null -sw '%{http_code}\n' 127.0.0.1:8000/ping | grep 200",
-    ] # 将 127.0.0.1:8000/ping 替换为服务的实际接口即可
+  test: ["CMD-SHELL", "curl -o /dev/null -sw '%{http_code}\n' 127.0.0.1:8000/ping | grep 200"] # 将 127.0.0.1:8000/ping 替换为服务的实际接口即可
 ```
 
 如果镜像中没有 `curl`，也可以使用 `wget` 命令检查
 
 ```yaml
 healthcheck:
-  test: [
-      "CMD-SHELL",
-      "wget --spider -S '127.0.0.1:8000/ping' 2>&1 | grep 'HTTP/' | awk '{print $$2}' | grep 200",
-    ] # 将 127.0.0.1:8000/ping 替换为服务的实际接口即可
+  test: ["CMD-SHELL", "wget --spider -S '127.0.0.1:8000/ping' 2>&1 | grep 'HTTP/' | awk '{print $$2}' | grep 200"] # 将 127.0.0.1:8000/ping 替换为服务的实际接口即可
 ```
 
-<Note type="warning">
-  健康状态检查的时间间隔不要设置的过短，建议将 `interval` 设置为 30s
-  或更长，否则可能会导致 CPU 占用过高。  
-  这是 Docker 的 BUG 导致的
+:::caution
+健康状态检查的时间间隔不要设置的过短，建议将 `interval` 设置为 30s
+或更长，否则可能会导致 CPU 占用过高。
+
+这是 Docker 的 BUG 导致的
 [moby/moby#39102](https://github.com/moby/moby/issues/39102)
 [moby/moby#39388](https://github.com/moby/moby/issues/39388) 。
-
-</Note>
+:::
 
 # 服务重启策略
 

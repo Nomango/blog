@@ -1,51 +1,82 @@
-@import "./props.css";
+:root {
+  --ra-color-note: #428bca;
+  --ra-color-tip: #5cb85c;
+  --ra-color-caution: #f0ad4e;
+  --ra-color-danger: #d9534f;
+}
 
-.starlight-aside {
+.remark-aside {
   padding: 1rem;
+  margin-bottom: 20px;
   border-inline-start: 0.25rem solid;
-  color: var(--sl-color-white);
-}
-.starlight-aside--note {
-  --sl-color-asides-text-accent: var(--sl-color-blue-high);
-  border-color: var(--sl-color-blue);
-  background-color: var(--sl-color-blue-low);
-}
-.starlight-aside--tip {
-  --sl-color-asides-text-accent: var(--sl-color-purple-high);
-  border-color: var(--sl-color-purple);
-  background-color: var(--sl-color-purple-low);
-}
-.starlight-aside--caution {
-  --sl-color-asides-text-accent: var(--sl-color-orange-high);
-  border-color: var(--sl-color-orange);
-  background-color: var(--sl-color-orange-low);
-}
-.starlight-aside--danger {
-  --sl-color-asides-text-accent: var(--sl-color-red-high);
-  border-color: var(--sl-color-red);
-  background-color: var(--sl-color-red-low);
+  border: 1px solid #eee;
+  border-radius: 0;
+  border-left-width: 5px;
 }
 
-.starlight-aside__title {
+.remark-aside p {
+  margin: 0 0 0 2em;
+}
+
+.remark-aside--note {
+  border-left-color: var(--ra-color-note);
+}
+.remark-aside--note svg {
+  fill: var(--ra-color-note);
+}
+.remark-aside--note .remark-aside__title {
+  color: var(--ra-color-note) !important;
+}
+
+.remark-aside--tip {
+  border-left-color: var(--ra-color-tip);
+}
+.remark-aside--tip svg {
+  fill: var(--ra-color-tip);
+}
+.remark-aside--tip .remark-aside__title {
+  color: var(--ra-color-tip) !important;
+}
+
+.remark-aside--caution {
+  border-left-color: var(--ra-color-caution);
+}
+.remark-aside--caution svg {
+  fill: var(--ra-color-caution);
+}
+.remark-aside--caution .remark-aside__title {
+  color: var(--ra-color-caution) !important;
+}
+
+.remark-aside--danger {
+  border-left-color: var(--ra-color-danger);
+}
+.remark-aside--danger svg {
+  fill: var(--ra-color-danger);
+}
+.remark-aside--danger .remark-aside__title {
+  color: var(--ra-color-danger) !important;
+}
+
+.remark-aside__title {
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  font-size: var(--sl-text-h5);
+  font-size: 1.125rem; /* 18px */
   font-weight: 600;
-  line-height: var(--sl-line-height-headings);
-  color: var(--sl-color-asides-text-accent);
+  margin: 0;
 }
 
-.starlight-aside__icon {
+.remark-aside__icon {
   font-size: 1.333em;
   width: 1em;
   height: 1em;
 }
 
-.starlight-aside__title + .starlight-aside__content {
+.remark-aside__title + .remark-aside__content {
   margin-top: 0.5rem;
 }
 
-.starlight-aside__content a {
+.remark-aside__content a {
   color: var(--sl-color-asides-text-accent);
 }

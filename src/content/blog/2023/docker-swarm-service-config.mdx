@@ -5,8 +5,6 @@ tags: [Docker, Docker Swarm, DevOps]
 description: 在分布式集群上，传统的配置文件分发方式都存在一些问题，所以 Docker Swarm 提供了 docker config 和 docker secret 两种方式来管理分布式集群服务的配置文件。
 ---
 
-import Note from "@components/md/Note.astro";
-
 在分布式集群上，传统的配置文件分发方式（打包进镜像、volume挂载、环境变量等）都存在一些问题。试想，如果挂载某个目录为镜像的配置文件目录，那么每一个节点上都要放一个相同的目录上去，而且服务升级时还要同时更新配置文件的目录，这显然增加了工作复杂度。
 
 Docker Swarm 提供了 `docker config` 和 `docker secret` 两种方式来管理分布式集群服务的配置文件。
@@ -92,10 +90,9 @@ secrets:
     file: ./secret.txt
 ```
 
-<Note type="info">
-  Docker 通过 TLS 加密连接传输 secret 的内容，并存储到加密的 Raft log
-  中。当创建的容器具有 secret 访问权限时，解密的密钥才会被挂载到容器中。
-</Note>
+:::note
+Docker 通过 TLS 加密连接传输 secret 的内容，并存储到加密的 Raft log 中。当创建的容器具有 secret 访问权限时，解密的密钥才会被挂载到容器中。
+:::
 
 ## 配置文件的版本管理
 

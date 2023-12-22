@@ -5,8 +5,6 @@ tags: [Docker, Docker Swarm, DevOps]
 description: Docker Swarm 可以在最少一台机器上部署，但机器出现问题后整个集群都不再可用，那如何规划集群中的节点更加合理呢？
 ---
 
-import Note from "@components/md/Note.astro";
-
 ## Docker Swarm 中的节点角色
 
 `Docker Swarm` 集群中的主机称为节点，节点有两种角色，`Manager` 管理节点和 `Worker` 工作节点。
@@ -27,7 +25,6 @@ Swarm 模式本身具有一定的容错性，Docker 官方建议在构建集群�
 - 有 5 个管理节点群最大可以容忍同时丢失 2 个管理节点节点
 - 有 `N` 个管理节点集群最多可以容忍 `(N-1)/2` 的管理节点丢失
 
-<Note type="info">
+:::note
 `Docker` 官方建议一个集群最多有七个管理节点。
-
-</Note>
+:::

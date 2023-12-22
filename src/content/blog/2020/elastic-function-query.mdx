@@ -4,8 +4,6 @@ date: 2020-09-10 15:40:40
 tags: [ElasticSearch]
 ---
 
-import Note from "@components/md/Note.astro";
-
 # 什么是 function score
 
 `function_score`查询用于控制查询文档的评分，可以把它看做一个套子，套在你的任何查询之上，专门用来修改结果的分值。
@@ -300,10 +298,10 @@ _score = _score + log(1 + 0.1 * sales)
 
 用于限制一个函数的最大效果，例如`max_boost`设为 20，那么无论每个函数的计算结果如何，最终的函数结果都不会大于 20。
 
-<Note type="info">
-  最终的**函数结果**都不会大于 20，但最终的\_score 可能大于 20，这取决于
-  boost_mode。
-</Note>
+:::note
+函数结果**都不会**大于 20，但最终的 \_score 可能大于 20，这取决于
+boost_mode。
+:::
 
 ## min_score
 
