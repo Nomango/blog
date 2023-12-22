@@ -22,16 +22,22 @@
     "@fontsource-variable/noto-sans-sc": "^5.0.3",
     "@fontsource/ibm-plex-mono": "^5.0.8",
     "@resvg/resvg-js": "^2.4.1",
+    "@types/mdast": "^4.0.3",
     "astro": "^4.0.7",
     "dateformat": "^5.0.3",
     "fuse.js": "^6.6.2",
     "github-slugger": "^2.0.0",
+    "mdast-util-directive": "^3.0.0",
     "medium-zoom": "^1.1.0",
     "remark-collapse": "^0.1.2",
+    "remark-directive": "^3.0.0",
     "remark-toc": "^9.0.0",
     "satori": "^0.10.8",
     "tailwindcss": "^3.3.3",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "unified": "^11.0.4",
+    "unist-util-remove": "^4.0.0",
+    "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
     "@astrojs/react": "^3.0.8",

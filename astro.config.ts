@@ -3,6 +3,7 @@ import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
 import remarkToc from "remark-toc";
 import remarkCollapse from "remark-collapse";
+import remarkAsides from "./src/plugins/remark-asides";
 import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
 import { SITE } from "./src/config";
@@ -21,7 +22,7 @@ export default defineConfig({
   markdown: {
     remarkPlugins: [
       [
-        remarkToc as any,
+        remarkToc,
         {
           maxDepth: 2,
           skip: "^$",
@@ -35,6 +36,7 @@ export default defineConfig({
           summary: (s: string) => "打开" + s,
         },
       ],
+      ...remarkAsides({}),
     ],
     shikiConfig: {
       theme: "material-theme-palenight",
@@ -47,4 +49,5 @@ export default defineConfig({
     },
   },
   scopedStyleStrategy: "where",
+  prefetch: true,
 });
