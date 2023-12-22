@@ -44,7 +44,7 @@ export default function remarkDirectiveButton() {
       const btn = h(
         "a",
         {
-          class: "rounded bg-skin-card p-2 !text-skin-base no-underline hover:!text-skin-base",
+          class: "remark-button rounded bg-skin-card p-2 !text-skin-base no-underline hover:!text-skin-base",
           rel: "noopener",
           ...attributes,
         },
