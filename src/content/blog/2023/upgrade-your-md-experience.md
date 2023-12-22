@@ -51,12 +51,13 @@ $ echo Hello World!
 
 如果你使用的是 `remark-js` 包进行渲染，或者用的是 `Astro` 框架搭建的网站，那么可以很轻松的加入这个功能，只需要将 [这段代码](https://github.com/Nomango/blog/tree/master/src/plugins/remark-asides) 拷贝到你的项目中，然后在 remark 插件配置中加入下面的代码：
 
-```js title="astro.config.js" {5}
+```js title="astro.config.js" {7,8}
+import remarkDirective from "remark-directive";
 import remarkAsides from "./src/plugins/remark-asides";
 
 export default defineConfig({
   markdown: {
-    remarkPlugins: [...remarkAsides({})],
+    remarkPlugins: [remarkDirective, remarkAsides({})],
   },
 });
 ```
@@ -141,6 +142,84 @@ import astroExpressiveCode from "astro-expressive-code";
 
 export default defineConfig({
   integrations: [astroExpressiveCode()],
+});
+```
+
+# 折叠块
+
+示例：
+
+:::collapse
+
+```bash
+$ echo Hello World!
+```
+
+:::
+
+````markdown
+:::collapse
+
+```bash
+$ echo Hello World!
+```
+
+:::
+````
+
+同样是一个基于 `remark-directive` 的插件，代码在[这里](https://github.com/Nomango/blog/tree/master/src/plugins/remark-directive-collapse)。
+
+只需要将插件加入到 remark plugins 即可。
+
+```js title="astro.config.js" {7,8}
+import remarkDirective from "remark-directive";
+import remarkDirectiveCollapse from "./src/plugins/remark-directive-collapse";
+
+export default defineConfig({
+  markdown: {
+    remarkPlugins: [remarkDirective, remarkDirectiveCollapse({ label: "展开" })],
+  },
+});
+```
+
+# 按钮
+
+示例：
+
+::btn[跳到标题]{href="#按钮"}
+
+代码：
+
+```markdown
+::btn[跳到标题]{href="#按钮"}
+```
+
+一个样式稍微复杂的按钮：
+
+:::btn{href="#按钮" target="\_blank"}
+:i{.fas .fa-share-from-square .fa-fw} 在新标签打开
+:::
+
+代码：
+
+```markdown
+:::btn{href="#按钮" target="\_blank"}
+:i{.fas .fa-share-from-square .fa-fw} 在新标签打开
+:::
+```
+
+同样是一个基于 `remark-directive` 的插件，代码在[这里](https://github.com/Nomango/blog/tree/master/src/plugins/remark-directive-button)。
+
+只需要将插件加入到 remark plugins 即可。
+
+```js title="astro.config.js" {7,8}
+import remarkDirective from "remark-directive";
+import remarkDirectiveButton from "./src/plugins/remark-directive-button";
+
+export default defineConfig({
+  markdown: {
+    remarkPlugins: [remarkDirective, remarkDirectiveButton],
+  },
 });
 ```
 
