@@ -51,7 +51,7 @@ $ echo Hello World!
 
 如果你使用的是 `remark-js` 包进行渲染，或者用的是 `Astro` 框架搭建的网站，那么可以很轻松的加入这个功能，只需要将 [这段代码](https://github.com/Nomango/blog/tree/master/src/plugins/remark-asides) 拷贝到你的项目中，然后在 remark 插件配置中加入下面的代码：
 
-```js title="astro.config.js" {7,8}
+```js title="astro.config.js" {6}
 import remarkDirective from "remark-directive";
 import remarkAsides from "./src/plugins/remark-asides";
 
@@ -171,7 +171,7 @@ $ echo Hello World!
 
 只需要将插件加入到 remark plugins 即可。
 
-```js title="astro.config.js" {7,8}
+```js title="astro.config.js" {6}
 import remarkDirective from "remark-directive";
 import remarkDirectiveCollapse from "./src/plugins/remark-directive-collapse";
 
@@ -212,7 +212,7 @@ export default defineConfig({
 
 只需要将插件加入到 remark plugins 即可。
 
-```js title="astro.config.js" {7,8}
+```js title="astro.config.js" {6}
 import remarkDirective from "remark-directive";
 import remarkDirectiveButton from "./src/plugins/remark-directive-button";
 
