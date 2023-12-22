@@ -118,7 +118,7 @@ yarn add astro-expressive-code
 
 然后加入到框架集成配置中
 
-```js {7}
+```js {6}
 // astro.config.mjs
 import { defineConfig } from "astro/config";
 import astroExpressiveCode from "astro-expressive-code";
