@@ -5,6 +5,8 @@ tags: [Markdown, Astro]
 description: 来看看现代化的 Markdown 文章书写技巧吧
 ---
 
+::toc
+
 `Markdown` 用于日常书写已经非常流畅了，不过现在大部分语法支持是 2017 年由 Github 发布的 `GFM` （GitHub Flavored Markdown），已经不太能满足现代化博客的多样化需求。
 
 虽然我们有更强更灵活的 `mdx`，支持在 Markdown 中插入组件，但是它需要书写者懂 `JSX` 的基本语法，引入组件时又没有代码提示（目前我使用的 vscode 插件不支持提示），无疑增加了使用门槛，而且和 markdown 本身带给作者的便利性有冲突。

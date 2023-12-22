@@ -1,9 +1,10 @@
 import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
-import remarkToc from "remark-toc";
-import remarkCollapse from "remark-collapse";
+import remarkDirective from "remark-directive";
 import remarkAsides from "./src/plugins/remark-asides";
+import remarkDirectiveCollapse from "./src/plugins/remark-directive-collapse";
+import remarkDirectivToc from "./src/plugins/remark-directive-toc";
 import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
 import astroExpressiveCode from "astro-expressive-code";
@@ -28,22 +29,14 @@ export default defineConfig({
   ],
   markdown: {
     remarkPlugins: [
-      [
-        remarkToc,
-        {
-          maxDepth: 2,
-          skip: "^$",
-          heading: "(table[ -]of[ -])?contents?|toc|目录",
-        },
-      ],
-      [
-        remarkCollapse,
-        {
-          test: "(table[ -]of[ -])?contents?|toc|目录",
-          summary: (s: string) => "打开" + s,
-        },
-      ],
-      ...remarkAsides({}),
+      remarkDirective,
+      remarkAsides({}),
+      remarkDirectiveCollapse({ label: "展开" }),
+      remarkDirectivToc({
+        maxDepth: 2,
+        skip: "^$",
+        label: "目录",
+      }),
     ],
     shikiConfig: {
       theme: "css-variables",

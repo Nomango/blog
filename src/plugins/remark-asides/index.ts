@@ -1,10 +1,7 @@
 /// <reference types="mdast-util-directive" />
 
-import type { RemarkPlugin } from "@astrojs/markdown-remark";
 import { h as _h, s as _s, type Properties } from "hastscript";
-import type { Paragraph as P, Root } from "mdast";
-import remarkDirective from "remark-directive";
-import type { Plugin, Transformer } from "unified";
+import type { Paragraph, Root } from "mdast";
 import { remove } from "unist-util-remove";
 import { visit } from "unist-util-visit";
 
@@ -26,12 +23,13 @@ function defaultLabel(v: Variant): string {
       return "Caution";
     case "danger":
       return "Danger";
+    default:
+      return "";
   }
-  return "";
 }
 
 /** Hacky function that generates an mdast HTML tree ready for conversion to HTML by rehype. */
-function h(el: string, attrs: Properties = {}, children: any[] = []): P {
+function h(el: string, attrs: Properties = {}, children: any[] = []): Paragraph {
   const { tagName, properties } = _h(el, attrs);
   return {
     type: "paragraph",
@@ -41,7 +39,7 @@ function h(el: string, attrs: Properties = {}, children: any[] = []): P {
 }
 
 /** Hacky function that generates an mdast SVG tree ready for conversion to HTML by rehype. */
-function s(el: string, attrs: Properties = {}, children: any[] = []): P {
+function s(el: string, attrs: Properties = {}, children: any[] = []): Paragraph {
   const { tagName, properties } = _s(el, attrs);
   return {
     type: "paragraph",
@@ -74,7 +72,12 @@ function s(el: string, attrs: Properties = {}, children: any[] = []): P {
  * </Aside>
  * ```
  */
-function remarkAsidesPlugin(options: AsidesOptions): Plugin<[], Root> {
+export default function remarkAsides(options: AsidesOptions) {
+  options = {
+    label: defaultLabel,
+    ...options,
+  };
+
   const isAsideVariant = (s: string): s is Variant => variants.has(s);
 
   const iconPaths = {
@@ -109,7 +112,7 @@ function remarkAsidesPlugin(options: AsidesOptions): Plugin<[], Root> {
     ],
   };
 
-  const transformer: Transformer<Root> = (tree, file) => {
+  const transformer = (tree: Root) => {
     visit(tree, (node, index, parent) => {
       if (!parent || index === undefined || node.type !== "containerDirective") {
         return;
@@ -160,12 +163,5 @@ function remarkAsidesPlugin(options: AsidesOptions): Plugin<[], Root> {
     });
   };
 
-  return function attacher() {
-    return transformer;
-  };
-}
-
-export default function remarkAsides(options: AsidesOptions): RemarkPlugin[] {
-  options.label ||= defaultLabel;
-  return [remarkDirective, remarkAsidesPlugin(options)];
+  return () => transformer;
 }

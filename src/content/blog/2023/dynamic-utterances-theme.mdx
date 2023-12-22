@@ -4,13 +4,13 @@ date: 2023-10-25 18:47:00
 tags: [Astro, React]
 ---
 
+::toc
+
 最近在给我的博客接入评论系统，因为只考虑基于 Github Issue 的评论框架，最后决定在 [Gitalk](https://github.com/gitalk/gitalk) 和 [Utterances](https://github.com/utterance/utterances) 中选一个。之前用过一段时间 Gitalk，当时没有设置每篇文章的 id，结果现在更改域名以后全都识别不了了，折腾了一会儿没解决，再加上它对 ts 和 React 的支持并不好，所以决定尝试一下 Utterances。
 
 因为我的博客有切换 `light` 和 `dark` 主题色的功能，于是想让 Utterances 也随博客主题一起变化。想实现的最终效果是这样的：
 
 ![最终效果](@assets/images/2023/dynamic-utterances-theme/preview.gif)
-
-## 目录
 
 ## 解决思路
 

@@ -44,18 +44,15 @@ dependencies:
   mdast-util-directive:
     specifier: ^3.0.0
     version: 3.0.0
+  mdast-util-toc:
+    specifier: ^7.0.0
+    version: 7.0.0
   medium-zoom:
     specifier: ^1.1.0
     version: 1.1.0
-  remark-collapse:
-    specifier: ^0.1.2
-    version: 0.1.2
   remark-directive:
     specifier: ^3.0.0
     version: 3.0.0
-  remark-toc:
-    specifier: ^9.0.0
-    version: 9.0.0
   satori:
     specifier: ^0.10.8
     version: 0.10.9
@@ -65,9 +62,6 @@ dependencies:
   typescript:
     specifier: ^5.2.2
     version: 5.2.2
-  unified:
-    specifier: ^11.0.4
-    version: 11.0.4
   unist-util-remove:
     specifier: ^4.0.0
     version: 4.0.0
@@ -4008,12 +4002,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /mdast-util-heading-range@2.1.5:
-    resolution: {integrity: sha512-jXbFD0C+MfRkwsaze+btzG9CmVrxnc5kpcJLtx3SvSlPWnNdGMlDRHKDB9/TIPEq9nRHnkixppT8yvaUJ5agJg==}
-    dependencies:
-      mdast-util-to-string: 1.1.0
-    dev: false
-
   /mdast-util-mdx-expression@2.0.0:
     resolution: {integrity: sha512-fGCu8eWdKUKNu5mohVGkhBXCXGnOTLuFqOvGMvdikr+J1w7lDJgxThOKpwRWzzbyXAU2hhSwsmssOY4yTokluw==}
     dependencies:
@@ -4101,10 +4089,6 @@ packages:
       micromark-util-decode-string: 2.0.0
       unist-util-visit: 5.0.0
       zwitch: 2.0.4
-
-  /mdast-util-to-string@1.1.0:
-    resolution: {integrity: sha512-jVU0Nr2B9X3MU4tSK7JP1CMkSvOj7X5l/GboG1tKRw52lLF1x2Ju92Ms9tNetCcbfX3hzlM73zYo2NKkWSfF/A==}
-    dev: false
 
   /mdast-util-to-string@4.0.0:
     resolution: {integrity: sha512-0H44vDimn51F0YwvxSJSm0eCDOJTRlmN0R1yBh4HLj9wiV1Dn0QoXGbvFAWj2hSItVTlCmBF1hqKlIyUBVFLPg==}
@@ -5191,13 +5175,6 @@ packages:
       rehype-stringify: 10.0.0
       unified: 11.0.4
 
-  /remark-collapse@0.1.2:
-    resolution: {integrity: sha512-x2lhtaT4nR1Tkp/hftoeiMHbdAntxu5Q9D6lymwMqUtoF2pg3bqNaa8NO/8yyOVhddYk0d0dkhGc+avGUf0lZA==}
-    dependencies:
-      mdast-util-heading-range: 2.1.5
-      mdast-util-to-string: 1.1.0
-    dev: false
-
   /remark-directive@3.0.0:
     resolution: {integrity: sha512-l1UyWJ6Eg1VPU7Hm/9tt0zKtReJQNOA4+iDMAxTyZNWnJnFlbS/7zhiel/rogTLQ2vMYwDzSJa4BiVNqGlqIMA==}
     dependencies:
@@ -5271,13 +5248,6 @@ packages:
       '@types/mdast': 4.0.3
       mdast-util-to-markdown: 2.1.0
       unified: 11.0.4
-
-  /remark-toc@9.0.0:
-    resolution: {integrity: sha512-KJ9txbo33GjDAV1baHFze7ij4G8c7SGYoY8Kzsm2gzFpbhL/bSoVpMMzGa3vrNDSWASNd/3ppAqL7cP2zD6JIA==}
-    dependencies:
-      '@types/mdast': 4.0.3
-      mdast-util-toc: 7.0.0
-    dev: false
 
   /request-light@0.7.0:
     resolution: {integrity: sha512-lMbBMrDoxgsyO+yB3sDcrDuX85yYt7sS8BfQd11jtbW/z5ZWgLZRcEGLsLoYw7I0WSUGQBs8CC8ScIxkTX1+6Q==}
