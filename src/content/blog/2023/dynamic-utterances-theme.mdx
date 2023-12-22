@@ -180,6 +180,10 @@ import UtterancesComment from "@components/Utterances";
 于是又写了一个简化版的 `astro` 实现，贴代码：
 
 ```astro
+---
+
+---
+
 <script
   src="https://utteranc.es/client.js"
   repo="YOUR/repo"
@@ -191,9 +195,7 @@ import UtterancesComment from "@components/Utterances";
 
 <script>
   function changeUtterancesTheme(theme: "github-dark" | "github-light") {
-    const iframe = document.querySelector(
-      ".utterances-frame"
-    ) as HTMLIFrameElement;
+    const iframe = document.querySelector(".utterances-frame") as HTMLIFrameElement;
     if (iframe) {
       const message = {
         type: "set-theme",
@@ -208,20 +210,13 @@ import UtterancesComment from "@components/Utterances";
     if (e.data && e.data.type === "resize") {
       // reset theme
       changeUtterancesTheme(
-        document.firstElementChild?.getAttribute("data-theme") === "dark"
-          ? "github-dark"
-          : "github-light"
+        document.firstElementChild?.getAttribute("data-theme") === "dark" ? "github-dark" : "github-light"
       );
     }
   });
 
-  document.addEventListener(
-    "themechange",
-    (e: CustomEvent<"light" | "dark">) => {
-      changeUtterancesTheme(
-        e.detail === "dark" ? "github-dark" : "github-light"
-      );
-    }
-  );
+  document.addEventListener("themechange", (e: CustomEvent<"light" | "dark">) => {
+    changeUtterancesTheme(e.detail === "dark" ? "github-dark" : "github-light");
+  });
 </script>
 ```

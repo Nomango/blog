@@ -51,14 +51,14 @@ $ docker swarm init
 
 执行成功后会看到这样一段输出：
 
-```diff
+```plain {5-7}
 Swarm initialized: current node (dxn1zxxxxx) is now a manager.
 
 To add a worker to this swarm, run the following command:
 
-+    docker swarm join \
-+    --token SWMTKN-1-49njxxxxx \
-+    192.168.99.100:2377
+    docker swarm join \
+    --token SWMTKN-1-49njxxxxx \
+    192.168.99.100:2377
 
 To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
 ```
@@ -96,8 +96,7 @@ $ docker service create --name my_web --replicas 3 -p 8080:80 nginx
 
 这样我们就创建了一个具有 3 个实例（有 3 个容器运行）的 nginx 服务，并且开放了容器的 80 端口到**所有节点**的 `8080` 端口上，此时我们访问任何一个节点的 8080 端口，都可以访问到 nginx 服务。
 
-```bash
-# 访问本地的 8080 端口
+```bash title="访问本地的 8080 端口"
 $ curl http://127.0.0.1:8080
 <!DOCTYPE html>
 <html>

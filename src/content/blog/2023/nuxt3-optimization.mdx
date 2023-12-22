@@ -88,7 +88,7 @@ PageSpeed 显示，`gtag`、`gtm` 等运营分析相关的 js 脚本阻塞的网
 
 使用 `Nginx` 也可以轻松开启 `gzip` 压缩
 
-```ini
+```ini title="nginx.conf" ins={2,3}
 http {
     gzip on;
     gzip_disable "msie6";
@@ -111,7 +111,7 @@ PageSpeed 建议将 `js` `css` 和图片等静态资源设置 1 年的长缓存�
 
 使用 `Nginx` 可以这样配置：
 
-```ini
+```ini title="nginx.conf"
 server {
     location / {
         # 设置静态资源缓存
@@ -200,7 +200,7 @@ export default defineNuxtConfig({
 
 我的网站分为线上和测试环境，想要在不同环境下使用不同的爬虫规则用这两种方法都做不到，最后决定在 Nginx 中直接配置 `robots.txt` 文件
 
-```ini
+```ini title="nginx.conf"
 server {
   location = /robots.txt {
     root /etc/nginx/pages;  # 实际目录
@@ -257,12 +257,7 @@ import MdEditor from "md-editor-v3";
 
 ```ts
 // modules/md-editor/index.ts
-import {
-  defineNuxtModule,
-  addComponent,
-  addPlugin,
-  createResolver,
-} from "@nuxt/kit";
+import { defineNuxtModule, addComponent, addPlugin, createResolver } from "@nuxt/kit";
 
 export default defineNuxtModule({
   setup(options, nuxt) {

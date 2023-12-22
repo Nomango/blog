@@ -6,6 +6,7 @@ import remarkCollapse from "remark-collapse";
 import remarkAsides from "./src/plugins/remark-asides";
 import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
+import astroExpressiveCode from "astro-expressive-code";
 import { SITE } from "./src/config";
 
 // https://astro.build/config
@@ -17,6 +18,12 @@ export default defineConfig({
     }),
     react(),
     sitemap(),
+    astroExpressiveCode({
+      themes: ["github-light", "material-theme-palenight"],
+      themeCssSelector: theme => {
+        return `[data-theme='${theme.name === "github-light" ? "light" : "dark"}']`;
+      },
+    }),
     mdx(),
   ],
   markdown: {
@@ -39,7 +46,7 @@ export default defineConfig({
       ...remarkAsides({}),
     ],
     shikiConfig: {
-      theme: "material-theme-palenight",
+      theme: "css-variables",
       wrap: true,
     },
   },

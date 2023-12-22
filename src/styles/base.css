@@ -88,6 +88,9 @@
   .prose h2#table-of-contents + p {
     @apply hidden;
   }
+  .prose .expressive-code {
+    @apply mb-2;
+  }
 
   /* ===== scrollbar ===== */
   html {

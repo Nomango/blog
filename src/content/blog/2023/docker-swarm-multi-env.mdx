@@ -12,7 +12,7 @@ description: Docker Swarm 部署多环境集群时，服务配置很多都是共
 这时就可以拆分 `compose` 文件，像下面这样
 
 ```yaml
-# base.yaml 文件
+# base.yaml
 version: "3.8"
 
 services:
@@ -44,7 +44,7 @@ networks:
 ```
 
 ```yaml
-# staging.yaml 文件
+# staging.yaml
 version: "3.8"
 
 services:
@@ -58,7 +58,7 @@ services:
 ```
 
 ```yaml
-# prod.yaml 文件
+# prod.yaml
 version: "3.8"
 
 services:
@@ -75,7 +75,7 @@ services:
 
 另外一个技巧是，如果一个 `compose` 文件定义了多个 service，那不同的 service 也可能有相同的重启策略、回滚策略等，这时可以用 `yaml` 的锚点技巧优化 `compose` 文件定义，例如
 
-```yaml
+```yaml {5} {22} {33} {35} {42} {44}
 # docker-compose.yaml
 version: "3.8"
 
