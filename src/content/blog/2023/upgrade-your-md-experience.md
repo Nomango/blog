@@ -49,7 +49,7 @@ $ echo Hello World!
 
 如果你使用的是 `remark-js` 包进行渲染，或者用的是 `Astro` 框架搭建的网站，那么可以很轻松的加入这个功能，只需要将 [这段代码](https://github.com/Nomango/blog/tree/master/src/plugins/remark-asides) 拷贝到你的项目中，然后在 remark 插件配置中加入下面的代码：
 
-```js title="astro.config.js" {6}
+```js title="astro.config.js" {5}
 import remarkAsides from "./src/plugins/remark-asides";
 
 export default defineConfig({
@@ -66,7 +66,7 @@ export default defineConfig({
 上面的代码块只需要在 Markdown 中这样书写：
 
 ````markdown /title=".+"/ /{\d+}/
-```js title="astro.config.js" {6}
+```js title="astro.config.js" {5}
 import remarkAsides from "./src/plugins/remark-asides";
 
 export default defineConfig({
