@@ -92,6 +92,10 @@ export async function generateOgImageForPost(post: Post) {
   return svgBufferToPngBuffer(svg);
 }
 
+export async function generateOgSvgForPost(post: Post) {
+  return await satori(postOgImage(post), options);
+}
+
 export async function generateOgImageForSite() {
   const svg = await satori(siteOgImage(), options);
   return svgBufferToPngBuffer(svg);
