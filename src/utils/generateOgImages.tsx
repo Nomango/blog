@@ -24,47 +24,51 @@ async function localFont(path: string, font: Omit<Font, "data">): Promise<Font> 
 }
 
 async function collectFonts(): Promise<Font[]> {
+  if (process.env.NODE_ENV === "development") {
+    return Promise.all([
+      localFont("../assets/fonts/ibm-plex-mono_5.0.8_latin-400-normal.ttf", {
+        name: "IBM Plex Mono",
+        weight: 400,
+        style: "normal",
+      }),
+      localFont("../assets/fonts/ibm-plex-mono_5.0.8_latin-600-normal.ttf", {
+        name: "IBM Plex Mono",
+        weight: 600,
+        style: "normal",
+      }),
+      localFont("../assets/fonts/noto-sans-sc_5.0.17_chinese-simplified-400-normal.woff", {
+        name: "Noto Sans SC",
+        weight: 400,
+        style: "normal",
+      }),
+      localFont("../assets/fonts/noto-sans-sc_5.0.17_chinese-simplified-600-normal.woff", {
+        name: "Noto Sans SC",
+        weight: 600,
+        style: "normal",
+      }),
+    ]);
+  }
   return Promise.all([
-    localFont("../assets/fonts/ibm-plex-mono_5.0.8_latin-400-normal.ttf", {
+    remoteFont("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-mono@latest/latin-400-normal.ttf", {
       name: "IBM Plex Mono",
       weight: 400,
       style: "normal",
     }),
-    localFont("../assets/fonts/ibm-plex-mono_5.0.8_latin-600-normal.ttf", {
+    remoteFont("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-mono@latest/latin-600-normal.ttf", {
       name: "IBM Plex Mono",
       weight: 600,
       style: "normal",
     }),
-    localFont("../assets/fonts/noto-sans-sc_5.0.17_chinese-simplified-400-normal.woff", {
+    remoteFont("https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-sc@latest/chinese-simplified-400-normal.woff", {
       name: "Noto Sans SC",
       weight: 400,
       style: "normal",
     }),
-    localFont("../assets/fonts/noto-sans-sc_5.0.17_chinese-simplified-600-normal.woff", {
+    remoteFont("https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-sc@latest/chinese-simplified-600-normal.woff", {
       name: "Noto Sans SC",
       weight: 600,
       style: "normal",
     }),
-    // remoteFont("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-mono@latest/latin-400-normal.ttf", {
-    //   name: "IBM Plex Mono",
-    //   weight: 400,
-    //   style: "normal",
-    // }),
-    // remoteFont("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-mono@latest/latin-600-normal.ttf", {
-    //   name: "IBM Plex Mono",
-    //   weight: 600,
-    //   style: "normal",
-    // }),
-    // remoteFont("https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-sc@latest/chinese-simplified-400-normal.woff", {
-    //   name: "Noto Sans SC",
-    //   weight: 400,
-    //   style: "normal",
-    // }),
-    // remoteFont("https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-sc@latest/chinese-simplified-600-normal.woff", {
-    //   name: "Noto Sans SC",
-    //   weight: 600,
-    //   style: "normal",
-    // }),
   ]);
 }
 
