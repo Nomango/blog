@@ -2,6 +2,7 @@ import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
 import remarkDirective from "remark-directive";
+import rehypeExternalLinks from "rehype-external-links";
 import remarkAsides from "./src/plugins/remark-asides";
 import remarkDirectiveCollapse from "./src/plugins/remark-directive-collapse";
 import remarkDirectivToc from "./src/plugins/remark-directive-toc";
@@ -42,6 +43,7 @@ export default defineConfig({
       remarkDirectiveButton,
       remarkDirectiveHTML,
     ],
+    rehypePlugins: [[rehypeExternalLinks, { target: "_blank", rel: ["nofollow"] }]],
     shikiConfig: {
       theme: "css-variables",
       wrap: true,
