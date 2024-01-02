@@ -88,6 +88,32 @@ const ogUrl = new URL(ogImageUrl ?? `/posts/${slugify(post)}.png`, Astro.url.ori
   });
 </script>
 
+<script>
+  async function renderDiagrams(graphs: HTMLCollectionOf<Element>) {
+    const { default: mermaid } = await import("mermaid");
+    mermaid.initialize({
+      startOnLoad: false,
+      fontFamily: "var(--sans-font)",
+      theme: window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default",
+    });
+    for (const graph of graphs) {
+      const content = graph.getAttribute("data-content");
+      if (!content) continue;
+      let svg = document.createElement("svg");
+      const id = (svg.id = "mermaid-" + Math.round(Math.random() * 100000));
+      graph.appendChild(svg);
+      mermaid.render(id, content).then(result => {
+        graph.innerHTML = result.svg;
+      });
+    }
+  }
+
+  const graphs = document.getElementsByClassName("mermaid");
+  if (document.getElementsByClassName("mermaid").length > 0) {
+    renderDiagrams(graphs);
+  }
+</script>
+
 <style>
   main {
     @apply mx-auto w-full max-w-3xl px-4 pb-12;

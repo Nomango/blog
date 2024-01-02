@@ -8,6 +8,7 @@ import remarkDirectiveCollapse from "./src/plugins/remark-directive-collapse";
 import remarkDirectivToc from "./src/plugins/remark-directive-toc";
 import remarkDirectiveButton from "./src/plugins/remark-directive-button";
 import remarkDirectiveHTML from "./src/plugins/remark-directive-html";
+import remarkMermaid from "./src/plugins/remark-mermaid";
 import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
 import astroExpressiveCode from "astro-expressive-code";
@@ -32,6 +33,7 @@ export default defineConfig({
   ],
   markdown: {
     remarkPlugins: [
+      remarkMermaid,
       remarkDirective,
       remarkAsides({}),
       remarkDirectiveCollapse({ label: "展开" }),
