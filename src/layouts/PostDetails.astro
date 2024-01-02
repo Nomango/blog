@@ -88,6 +88,12 @@ const ogUrl = new URL(ogImageUrl ?? `/posts/${slugify(post)}.png`, Astro.url.ori
   });
 </script>
 
+<style is:global>
+  .medium-zoom-overlay, .medium-zoom-image--opened {
+    z-index: 99;
+  }
+</style>
+
 <script>
   async function renderDiagrams(graphs: HTMLCollectionOf<Element>) {
     const { default: mermaid } = await import("mermaid");
