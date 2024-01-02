@@ -74,10 +74,18 @@ const ogUrl = new URL(ogImageUrl ?? `/posts/${slugify(post)}.png`, Astro.url.ori
 </Layout>
 
 <script>
-  import zoom from "@utils/mediumZoom";
+  import mediumZoom from "medium-zoom/dist/pure";
+  import "medium-zoom/dist/style.css";
+
+  const zoom = mediumZoom({
+    background: "rgba(0, 0, 0, 0.8)",
+  });
 
   // listen to astro:page-load event to handle the first loading
-  document.addEventListener("astro:page-load", () => zoom.attach("main.post-detail img"));
+  document.addEventListener("astro:page-load", () => {
+    zoom.detach();
+    zoom.attach("main.post-detail img");
+  });
 </script>
 
 <style>
