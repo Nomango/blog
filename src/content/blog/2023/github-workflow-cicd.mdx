@@ -308,11 +308,11 @@ function deploy() {
 }
 
 function restart() {
-  docker service update --quiet --force "$service"
+  docker service update --quiet --force "${SERVICE}"
 }
 
 function rollback() {
-  docker service rollback --quiet "$service"
+  docker service rollback --quiet "${SERVICE}"
 }
 
 case "$2" in
