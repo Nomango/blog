@@ -130,6 +130,9 @@
     stroke-current stroke-2 opacity-90 group-hover:fill-transparent 
     sm:scale-110;
   }
+  .mermaid {
+    @apply overflow-auto;
+  }
   .mermaid > svg {
     @apply h-min w-auto p-2;
   }
