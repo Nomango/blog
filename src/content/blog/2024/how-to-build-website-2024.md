@@ -87,6 +87,8 @@ Vercel 是我用过的最舒服的网站托管了，它可以自动识别一众�
 
 另外 [GitBook](https://www.gitbook.com)、[Mintlify](https://mintlify.com) 这种文档类的托管网站也会提供免费的部署服务。
 
+![Vercel Dashboard](@assets/how-to-build-website-2024/image-1.png)
+
 # 方案三：Serverless
 
 顾名思义，Serverless 无服务器。前几年抄的火热，不过就我已知的情况，国内一直是雷声大雨点小。
@@ -97,7 +99,9 @@ Serverless 还往往集成了日志收集、监控告警、公网接口、链路
 
 阿里云、腾讯云等各大运营商都有自家的 Serverless 服务，我体验了阿里云的 Serverless Fcuntion，从看文档到服务上线还是要折腾一下的，因为它更推荐用 YAML 定义函数服务的各项细节，有些参数比如 VPC、安全组、交换机等等其实我完全不关心，也必须手动粘贴各种 ID 到 YAML 里一点一点配置。
 
-后来阿里云推出了 Serverless App 这种直接在网站 UI 上搭建应用的功能，确实很方便，还可以和 Github 等代码仓库绑定，目测是挺不错的，没有真正体验过。
+后来阿里云推出了 Serverless App 这种直接在网站 UI 上搭建应用的功能，确实很方便，还可以和 Github 等代码仓库绑定。
+
+![Serverless体验](@assets/how-to-build-website-2024/image-2.png)
 
 :::tip
 其实 Deno Deploy、Vercel 这些平台也支持部署 Serverless Function，可以用来做一些小玩意，比如 [hbsgithub/deno-azure-openai-proxy](https://github.com/hbsgithub/deno-azure-openai-proxy) 可以一键部署 OpenAI 代理（国内也可以访问）
@@ -111,6 +115,8 @@ Serverless 还往往集成了日志收集、监控告警、公网接口、链路
 
 不过 Supabase 仍然在国内访问受限，国内的替代品是 [AirCode](https://aircode.io)、[LeanCloud](https://www.leancloud.cn/)。
 
+![AirCode体验](@assets/how-to-build-website-2024/image-3.png)
+
 :::caution
 使用 SaaS 服务有一个坏处是，一旦用了一个平台就很难脱离，迁移困难是一方面，还要祈祷这个平台不要哪天突然挂了 XD
 :::
@@ -123,7 +129,9 @@ Serverless 还往往集成了日志收集、监控告警、公网接口、链路
 
 我用过体验还不错的平台是 [Zeabur](https://zeabur.com/) 和 [SealOS](https://sealos.io)，这两个平台在国内访问都还 ok，一个是月会员一个是按量付费，我用了一段时间感觉 Zeabur 的 Discord 回复非常及时，SealOS 虽然没这种活跃度，但是它有个部署在国内的版本 [cloud.sealos.top](https://cloud.sealos.top)（服务器在杭州）访问速度非常好，所以各有千秋吧。
 
-> 虽然阿里云也有 ACS 容器计算，我简单试了下感觉太麻烦，不知道为什么就是难用。。
+![Zeabur体验](@assets/how-to-build-website-2024/image-4.png)
+
+> 虽然阿里云也有 ACS 容器计算，我试了下感觉太麻烦，不知道为什么就是难用。。
 
 # 方案六：低代码
 
