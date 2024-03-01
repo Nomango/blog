@@ -1,7 +1,7 @@
 ---
 title: 在Netlify一站式构建你的个人网站
 date: 2020-09-03 11:04:42
-tags: [Netlify]
+tags: [Frontend]
 ---
 
 # 什么是 Netlify
