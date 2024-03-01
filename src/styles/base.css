@@ -72,7 +72,7 @@
     @apply mb-2;
   }
   .prose details {
-    @apply inline-block cursor-pointer select-none text-skin-base;
+    @apply mb-3 inline-block cursor-pointer select-none text-skin-base;
   }
   .prose summary {
     @apply focus-outline;
