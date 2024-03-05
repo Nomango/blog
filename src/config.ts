@@ -46,7 +46,7 @@ export const SOCIALS: SocialObjects = [
     name: "Discord",
     href: "https://discordapp.com/users/1005533340025225319",
     linkTitle: `${SITE.author} on Discord`,
-    active: true,
+    active: false,
   },
   {
     name: "Zhihu",
@@ -58,7 +58,7 @@ export const SOCIALS: SocialObjects = [
     name: "Weibo",
     href: "https://weibo.com/u/5309142901",
     linkTitle: `${SITE.author} on Weibo`,
-    active: false,
+    active: true,
   },
   {
     name: "RSS",
