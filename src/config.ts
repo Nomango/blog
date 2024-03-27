@@ -1,7 +1,7 @@
 import type { Site, SocialObjects } from "./types";
 
 export const SITE: Site = {
-  website: "https://nomango.dev/",
+  website: "https://nomx.dev/",
   author: "Haibo Liu",
   desc: "Nomango's blog website.",
   title: "Nomango's Blog",
