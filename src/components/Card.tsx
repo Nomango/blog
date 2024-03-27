@@ -41,7 +41,7 @@ function PostTag({ name }: { name: string }) {
     <li className="my-1 inline-block underline-offset-4">
       <a
         href={`/tags/${tag}`}
-        className="group relative pr-2 text-sm underline decoration-dashed hover:-top-0.5 hover:text-skin-accent focus-visible:p-1"
+        className="group relative pr-2 text-sm hover:underline hover:decoration-dashed hover:-top-0.5 hover:text-skin-accent focus-visible:p-1"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
