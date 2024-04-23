@@ -107,11 +107,11 @@ Serverless 还往往集成了日志收集、监控告警、公网接口、链路
 其实 Deno Deploy、Vercel 这些平台也支持部署 Serverless Function，可以用来做一些小玩意，比如 [hbsgithub/deno-azure-openai-proxy](https://github.com/hbsgithub/deno-azure-openai-proxy) 可以一键部署 OpenAI 代理（国内也可以访问）
 :::
 
-# 方案四：轻服务SaaS
+# 方案四：Firebase
 
-这种平台我不知道它应该叫什么，暂且叫它轻服务吧，和 Serverless 很像，都是编写一些代码片段即可运行，Serverless 有的它都有。在这个基础上集成了 Database、调试控制台、WebIDE、甚至 Auth、SMS 等功能，就可以一站式解决后端服务。
+Firebase 支持部署 Serverless Function，在这个基础上集成了 Database、调试控制台、WebIDE、甚至 Auth、SMS 等功能，就可以一站式解决后端服务。
 
-这种 SaaS 服务比较有代表性的平台是 [Supabase](https://supabase.com/)，它就像一个完整的工作台，在它上面开发一切都很顺畅，就像有人给你精心设计了一系列游戏关卡，在里面感受制作人对程序员头发脱落问题的善意。
+这种 SaaS 服务比较有名的平台是 [Supabase](https://supabase.com/)，它就像一个完整的工作台，在它上面开发一切都很顺畅，就像有人给你精心设计了一系列游戏关卡，在里面感受制作人对程序员头发脱落问题的善意。
 
 不过 Supabase 仍然在国内访问受限，国内的替代品是 [AirCode](https://aircode.io)、[LeanCloud](https://www.leancloud.cn/)。
 
