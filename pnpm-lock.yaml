@@ -8,6 +8,9 @@ dependencies:
   '@astrojs/check':
     specifier: ^0.3.3
     version: 0.3.3(prettier-plugin-astro@0.12.0)(prettier@3.0.3)(typescript@5.2.2)
+  '@astrojs/deno':
+    specifier: ^5.0.1
+    version: 5.0.1(astro@4.0.7)
   '@astrojs/mdx':
     specifier: ^2.0.2
     version: 2.0.2(astro@4.0.7)
@@ -178,6 +181,15 @@ packages:
 
   /@astrojs/compiler@2.3.4:
     resolution: {integrity: sha512-33/YtWoBCE0cBUNy1kh78FCDXBoBANX87ShgATlAHECYbG2+buNTAgq4Xgz4t5NgnEHPN21GIBC2Mvvwisoutw==}
+
+  /@astrojs/deno@5.0.1(astro@4.0.7):
+    resolution: {integrity: sha512-nYztGqHqC+q3A9ynjj3gblAkO/ZylDwahjVTx+2DvZgX4U+BJU/gL5BZkNtL+P10opCKJi29NvvVFvk6jwZHmA==}
+    peerDependencies:
+      astro: ^3.1.4
+    dependencies:
+      astro: 4.0.7(@types/node@20.4.7)(typescript@5.2.2)
+      esbuild: 0.19.10
+    dev: false
 
   /@astrojs/internal-helpers@0.2.1:
     resolution: {integrity: sha512-06DD2ZnItMwUnH81LBLco3tWjcZ1lGU9rLCCBaeUCGYe9cI0wKyY2W3kDyoW1I6GmcWgt1fu+D1CTvz+FIKf8A==}

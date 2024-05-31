@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Clone repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Deno
         uses: denoland/setup-deno@v1
@@ -36,5 +36,5 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: nom-blog
-          entrypoint: "https://deno.land/std@0.188.0/http/file_server.ts"
-          root: "dist"
+          entrypoint: server/entry.mjs
+          root: dist

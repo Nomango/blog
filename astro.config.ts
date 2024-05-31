@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import deno from "@astrojs/deno";
 import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
 import remarkDirective from "remark-directive";
@@ -17,6 +18,8 @@ import { SITE } from "./src/config";
 // https://astro.build/config
 export default defineConfig({
   site: SITE.website,
+  output: "server",
+  adapter: deno(),
   integrations: [
     tailwind({
       applyBaseStyles: false,
