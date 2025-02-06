@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import satori, { type SatoriOptions, type Font } from "satori";
-import { Resvg } from "@resvg/resvg-js";
+import { Resvg } from "@resvg/resvg-wasm";
 import postOgImage from "./og-templates/post";
 import siteOgImage from "./og-templates/site";
 import type { Post } from "./getPosts";
