@@ -1,4 +1,3 @@
-import fs from "node:fs/promises";
 import satori, { type SatoriOptions, type Font } from "satori";
 import { Resvg } from "@resvg/resvg-wasm";
 import postOgImage from "./og-templates/post";
@@ -15,6 +14,7 @@ async function remoteFont(url: string, font: Omit<Font, "data">): Promise<Font> 
 }
 
 async function localFont(path: string, font: Omit<Font, "data">): Promise<Font> {
+  const fs = await import("node:fs/promises");
   const url = new URL(path, import.meta.url);
   const data = await fs.readFile(url);
   return {
