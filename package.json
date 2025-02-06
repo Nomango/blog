@@ -6,6 +6,8 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
+    "build:deno": "PLATFORM=deno astro build",
+    "build:cloudflare": "PLATFORM=cloudflare astro build",
     "preview": "astro preview",
     "sync": "astro sync",
     "astro": "astro",

@@ -21,7 +21,7 @@ import cloudflare from "@astrojs/cloudflare";
 export default defineConfig({
   site: SITE.website,
   output: "server",
-  adapter: cloudflare(),
+  adapter: process.env.PLATFORM === "cloudflare" ? cloudflare() : process.env.PLATFORM === "deno" ? deno() : undefined,
   integrations: [
     tailwind({
       applyBaseStyles: false,

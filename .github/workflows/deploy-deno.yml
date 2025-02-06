@@ -1,9 +1,7 @@
 name: Deploy to Deno
 on:
   push:
-    branches: master
-  pull_request:
-    branches: master
+    branches: [main, master]
   workflow_dispatch:
 
 jobs:
@@ -30,7 +28,7 @@ jobs:
           version: 8
 
       - name: Build step
-        run: "pnpm install && pnpm run build"
+        run: "pnpm install && pnpm run build:deno"
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
