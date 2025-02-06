@@ -15,11 +15,13 @@ import mdx from "@astrojs/mdx";
 import astroExpressiveCode from "astro-expressive-code";
 import { SITE } from "./src/config";
 
+import cloudflare from "@astrojs/cloudflare";
+
 // https://astro.build/config
 export default defineConfig({
   site: SITE.website,
   output: "server",
-  adapter: deno(),
+  adapter: cloudflare(),
   integrations: [
     tailwind({
       applyBaseStyles: false,
@@ -39,7 +41,9 @@ export default defineConfig({
       remarkMermaid,
       remarkDirective,
       remarkAsides({}),
-      remarkDirectiveCollapse({ label: "展开" }),
+      remarkDirectiveCollapse({
+        label: "展开",
+      }),
       remarkDirectivToc({
         maxDepth: 2,
         skip: "^$",
@@ -48,7 +52,15 @@ export default defineConfig({
       remarkDirectiveButton,
       remarkDirectiveHTML,
     ],
-    rehypePlugins: [[rehypeExternalLinks, { target: "_blank", rel: ["nofollow"] }]],
+    rehypePlugins: [
+      [
+        rehypeExternalLinks,
+        {
+          target: "_blank",
+          rel: ["nofollow"],
+        },
+      ],
+    ],
     shikiConfig: {
       theme: "css-variables",
       wrap: true,
