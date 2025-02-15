@@ -4,6 +4,8 @@ import Posts from "@layouts/Posts.astro";
 import getPageNumbers from "@utils/getPageNumbers";
 import getPosts, { getSortedPosts } from "@utils/getPosts";
 
+export const prerender = true;
+
 const sortedPosts = getSortedPosts(await getPosts());
 
 const totalPages = getPageNumbers(sortedPosts.length);
