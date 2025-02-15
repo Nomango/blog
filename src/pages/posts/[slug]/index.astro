@@ -11,6 +11,8 @@ export interface Props {
   post: Post;
 }
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const posts = await getPosts();
   const postResult = posts.reduce(

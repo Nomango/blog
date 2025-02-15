@@ -1,5 +1,6 @@
-import { defineConfig } from "astro/config";
+import { defineConfig, passthroughImageService } from "astro/config";
 import deno from "@astrojs/deno";
+import cloudflare from "@astrojs/cloudflare";
 import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
 import remarkDirective from "remark-directive";
@@ -15,13 +16,14 @@ import mdx from "@astrojs/mdx";
 import astroExpressiveCode from "astro-expressive-code";
 import { SITE } from "./src/config";
 
-import cloudflare from "@astrojs/cloudflare";
-
 // https://astro.build/config
 export default defineConfig({
   site: SITE.website,
   output: "server",
   adapter: process.env.PLATFORM === "cloudflare" ? cloudflare() : process.env.PLATFORM === "deno" ? deno() : undefined,
+  image: {
+    service: ["cloudflare", "deno"].includes(process.env.PLATFORM) ? passthroughImageService() : undefined,
+  },
   integrations: [
     tailwind({
       applyBaseStyles: false,
@@ -67,9 +69,12 @@ export default defineConfig({
     },
   },
   vite: {
-    optimizeDeps: {
-      exclude: ["@resvg/resvg-js"],
+    ssr: {
+      external: ['node:fs/promises'],
     },
+    // optimizeDeps: {
+    //   exclude: ["@resvg/resvg-wasm"],
+    // },
   },
   scopedStyleStrategy: "where",
   prefetch: true,

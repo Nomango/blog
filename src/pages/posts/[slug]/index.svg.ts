@@ -3,6 +3,8 @@ import { generateOgSvgForPost } from "@utils/generateOgImages";
 import slugify from "@utils/slugify";
 import getPosts, { type Post } from "@utils/getPosts";
 
+export const prerender = false;
+
 export async function getStaticPaths() {
   const posts = await getPosts().then(p => p.filter(({ data }) => !data.ogImage));
 
