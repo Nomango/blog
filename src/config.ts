@@ -1,10 +1,10 @@
 import type { Site, SocialObjects } from "./types";
 
 export const SITE: Site = {
-  website: "https://nomx.dev/",
-  author: "Haibo Liu",
-  desc: "Nomango's blog website.",
-  title: "Nomango's Blog",
+  website: "https://lavliet.me/",
+  author: "Lavi",
+  desc: "Lavliet's blog website.",
+  title: "Lavi's Blog",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
   postPerPage: 10,
@@ -20,7 +20,7 @@ export const LOGO_IMAGE = {
 export const SOCIALS: SocialObjects = [
   {
     name: "Github",
-    href: "https://github.com/Nomango",
+    href: "https://github.com/nomango",
     linkTitle: ` ${SITE.author} on Github`,
     active: true,
   },
