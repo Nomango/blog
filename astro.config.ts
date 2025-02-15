@@ -70,11 +70,11 @@ export default defineConfig({
   },
   vite: {
     ssr: {
-      external: ['node:fs/promises'],
+      external: process.env.PLATFORM === "cloudflare" ? ["fs", "path", "child_process", "@resvg/resvg-js"] : undefined,
     },
-    // optimizeDeps: {
-    //   exclude: ["@resvg/resvg-wasm"],
-    // },
+    optimizeDeps: {
+      exclude: ["@resvg/resvg-js"],
+    },
   },
   scopedStyleStrategy: "where",
   prefetch: true,

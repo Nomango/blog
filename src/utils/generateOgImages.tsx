@@ -1,5 +1,5 @@
 import satori, { type SatoriOptions, type Font } from "satori";
-import { Resvg } from "@resvg/resvg-wasm";
+import { Resvg } from "@resvg/resvg-js";
 import postOgImage from "./og-templates/post";
 import siteOgImage from "./og-templates/site";
 import type { Post } from "./getPosts";
@@ -13,41 +13,41 @@ async function remoteFont(url: string, font: Omit<Font, "data">): Promise<Font> 
   };
 }
 
-async function localFont(path: string, font: Omit<Font, "data">): Promise<Font> {
-  const fs = await import("node:fs/promises");
-  const url = new URL(path, import.meta.url);
-  const data = await fs.readFile(url);
-  return {
-    ...font,
-    data: data,
-  };
-}
+// async function localFont(path: string, font: Omit<Font, "data">): Promise<Font> {
+//   const fs = await import("node:fs/promises");
+//   const url = new URL(path, import.meta.url);
+//   const data = await fs.readFile(url);
+//   return {
+//     ...font,
+//     data: data,
+//   };
+// }
 
 async function collectFonts(): Promise<Font[]> {
-  if (process.env.NODE_ENV === "development") {
-    return Promise.all([
-      localFont("../assets/fonts/ibm-plex-mono_5.0.8_latin-400-normal.ttf", {
-        name: "IBM Plex Mono",
-        weight: 400,
-        style: "normal",
-      }),
-      localFont("../assets/fonts/ibm-plex-mono_5.0.8_latin-600-normal.ttf", {
-        name: "IBM Plex Mono",
-        weight: 600,
-        style: "normal",
-      }),
-      localFont("../assets/fonts/noto-sans-sc_5.0.17_chinese-simplified-400-normal.woff", {
-        name: "Noto Sans SC",
-        weight: 400,
-        style: "normal",
-      }),
-      localFont("../assets/fonts/noto-sans-sc_5.0.17_chinese-simplified-600-normal.woff", {
-        name: "Noto Sans SC",
-        weight: 600,
-        style: "normal",
-      }),
-    ]);
-  }
+  // if (process.env.NODE_ENV === "development") {
+  //   return Promise.all([
+  //     localFont("../assets/fonts/ibm-plex-mono_5.0.8_latin-400-normal.ttf", {
+  //       name: "IBM Plex Mono",
+  //       weight: 400,
+  //       style: "normal",
+  //     }),
+  //     localFont("../assets/fonts/ibm-plex-mono_5.0.8_latin-600-normal.ttf", {
+  //       name: "IBM Plex Mono",
+  //       weight: 600,
+  //       style: "normal",
+  //     }),
+  //     localFont("../assets/fonts/noto-sans-sc_5.0.17_chinese-simplified-400-normal.woff", {
+  //       name: "Noto Sans SC",
+  //       weight: 400,
+  //       style: "normal",
+  //     }),
+  //     localFont("../assets/fonts/noto-sans-sc_5.0.17_chinese-simplified-600-normal.woff", {
+  //       name: "Noto Sans SC",
+  //       weight: 600,
+  //       style: "normal",
+  //     }),
+  //   ]);
+  // }
   return Promise.all([
     remoteFont("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-mono@latest/latin-400-normal.ttf", {
       name: "IBM Plex Mono",
