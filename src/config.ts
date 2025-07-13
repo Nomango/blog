@@ -1,10 +1,10 @@
 import type { Site, SocialObjects } from "./types";
 
 export const SITE: Site = {
-  website: "https://lavliet.me/",
-  author: "Lavi",
-  desc: "Lavliet's blog website.",
-  title: "Lavi's Blog",
+  website: "https://leeoo.me/",
+  author: "Leeoo",
+  desc: "Leeoo's blog website.",
+  title: "Leeoo's Blog",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
   postPerPage: 10,
@@ -32,7 +32,7 @@ export const SOCIALS: SocialObjects = [
   },
   {
     name: "Mail",
-    href: "mailto:lavliet@foxmail.com",
+    href: "mailto:leeoo.liu@foxmail.com",
     linkTitle: `Send an email to ${SITE.author}`,
     active: false,
   },
